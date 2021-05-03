@@ -113,10 +113,8 @@ simultaneously.  For example:
       startSlider(1, 5000)
    ]
 
-In this hypothetical scenario, a slider runs once to animate something
-and then it is reset and a bunch of other elements are altered, hidden
-and revealed all at once, then the animation is run again.  Without the
-grouping, intermediate settings might be visible as glitches.  Delays
+Without the grouping, intermediate states from setting individual values and showing or hiding
+individual expressions might be visible as glitches.  Delays
 within the grouped commands are ignored, and animateValue instructions
 will go directly to the ending value.  It is an error to have a goto
 instruction inside a grouping.
@@ -131,11 +129,11 @@ Here is a summary of the instructions.  Detailed descriptions appear below.
     show (<id>, [<id>, ...])
     hideLabel (<id>, [<id>, ...])
     showLabel (<id>, [<id>, ...])
-    setLabel (<id>, <label-string>)
+    setLabel (<id>, <labelStr>)
     setValue (<id>, <value>, [<delay>])
     startSlider (<id>, [<delay>])
     stopSlider (<id>, [<delay>])
-    animateValue (<id>, <start-value>, <end-value>, <increment>, [<frame-delay>], [<delay>])
+    animateValue (<id>, <startVal>, <endVal>, <increment>, [<frameDelay>], [<delay>])
     setSliderProperties (<id>, {<properties>}, [<delay>])
     set (<id>, <properties>, [<delay>])
     stop (<message-string>)
@@ -143,21 +141,114 @@ Here is a summary of the instructions.  Detailed descriptions appear below.
     label (<label-name-string>)
     goto (<label-name-string>, [<repeat-count>])
 
-### hide \(\<id\>, \[\<id\>, ...\]\)
+### Instruction Functions
+
+#### hide \(\<id\>, \[\<id\>, ...\]\)
 Parameter | Description
 --- | ---
-id | Comma separated list of expression ID's to hide
+id | A comma-separated list of expression ID's to hide
 
 Hides all the expressions given as arguments to the instruction.
 Moves on to the next instruction immediately.
 
-### show \(\<id\>, \[\<id\>, ...\]\)
+#### show \(\<id\>, \[\<id\>, ...\]\)
 Parameter | Description
   --- | ---
-  id | comma separated list of expression id's
+  id | A comma-separated list of expression ID's
 
 Shows (un-hides) all the expressions given as arguments to the instruction.
 Moves on to the next instruction immediately.
+
+#### hideLabel \(\<id\>, \[\<id\>, ...\]\)
+Parameter | Description
+--- | ---
+id | A comma-separated list of expression ID's
+
+Turns off the label of all the expressions given as arguments to
+the instruction.  Moves on to the next instruction immediately.
+
+#### showLabel \(\<id\>, \[\<id\>, ...\]\)
+Parameter | Description
+--- | ---
+id | A comma-separated list of expression ID's
+
+Turns on the label of all the expressions given as arguments to
+the instruction.  Moves on to the next instruction immediately.
+
+#### setLabel \(\<id\>, \<labelStr\>\)
+Parameter | Description
+--- | ---
+id | The ID of an expression with a label
+labelStr | The desired label string
+
+Sets the label of the given expression to the given string.
+If the string uses latex, enclose the latex in back-ticks as usual.
+
+#### setValue \(\<id\>, \<value\>, \[\<delay\>\]\)
+Parameter | Description
+--- | ---
+id | The ID of a "\<name\>=\<value\>" type of expression
+value | Latex string or number of new value
+delay | (optional) Number of ms to delay before next instruction
+
+Replaces the `<value>` part of the given expression with the given value.
+The value can be any latex expression string or a number.  If the
+expression has a slider that is playing, it will be stopped first.
+
+#### startSlider \(\<id\>, \[\<delay\>\]\)
+Parameter | Description
+--- | ---
+id | The ID of an expression that has a slider
+delay | (optional) Number of milliseconds to delay before next instruction
+
+Equivalent to pressing the play button on a slider when it is not yet running.
+
+#### stopSlider \(\<id\>, \[\<delay\>\]\)
+Parameter | Description
+--- | ---
+id | The ID of an expression that has a slider
+delay | (optional) Number of milliseconds to delay before next instruction
+
+Equivalent to pressing the pause button on a slider when it is already running.
+
+#### animateValue \(\<id\>, \<startVal\>, \<endVal\>, \<increment\>, \[\<frameTime\>\], \[\<delay\>\]\)
+Parameter | Description
+--- | ---
+id | The ID of a "\<name\>=\<value\>" type of expression
+startVal | The starting value for the animation
+endVal | The ending value for the animation
+interval | The amount to step by on each frame
+frameTime | (optional) Number of milliseconds of explicit delay between frames
+delay | (optional) Number of milliseconds to wait after animation is done
+
+Animates a variable by setting its value to `startVal` and incrementing or
+decrementing it by the given `interval` until it reaches `endVal`.  Speed
+can be controlled by changing the `interval` and by giving a `frameTime` value.
+This is similar to playing a slider, but allows explicit control over the
+speed and the step size, and allows running in reverse.  The instruction
+blocks until the `endVal` is reached, unlike startSlider which moves on to
+the next instruction after the slider starts.  If the expression has a
+slider that is playing, it will be stopped first.
+
+#### setSliderProperties \(\<id\>, \{\<properties\>\}, \[\<delay\>\]\)
+Parameter | Description
+--- | ---
+id | The ID of an expression with a slider
+properties | The properties to be set
+delay | Number of milliseconds to wait before next instruction
+
+Sets the given properties of the given slider. Only the properties that you want to change need be specified. The properties are:
+
+    min: <latex or number>
+    max: <latex or number>
+    step: <latex or number>
+    period: <time in milliseconds from min to max>
+    loopMode: "LOOP_FORWARD_REVERSE" or
+              "LOOP_FORWARD" or
+              "PLAY_ONCE" or
+              "PLAY_FOREVER"
+
+For example: `setSliderProperties(val1, {min: 0, max: 10, step: 1, period: 8000, loopMode: "PLAY_ONCE"})`\
 
 ## Credits
 Thanks to GitHub users jared-hughes and FabriceNayret for their guidance, examples and ideas for improvement.
