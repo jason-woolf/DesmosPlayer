@@ -129,17 +129,17 @@ Here is a summary of the instructions.  Detailed descriptions appear below.
     show (<id>, [<id>, ...])
     hideLabel (<id>, [<id>, ...])
     showLabel (<id>, [<id>, ...])
-    setLabel (<id>, <labelStr>)
+    setLabel (<id>, <labelString>)
     setValue (<id>, <value>, [<delay>])
     startSlider (<id>, [<delay>])
     stopSlider (<id>, [<delay>])
     animateValue (<id>, <startVal>, <endVal>, <increment>, [<frameDelay>], [<delay>])
     setSliderProperties (<id>, {<properties>}, [<delay>])
     set (<id>, <properties>, [<delay>])
-    stop (<message-string>)
+    stop (<messageString>)
     pause (<delay>)
-    label (<label-name-string>)
-    goto (<label-name-string>, [<repeat-count>])
+    label (<labelNameString>)
+    goto (<labelNameString>, [<repeatCount>])
 
 ### Instruction Functions
 
@@ -151,6 +151,8 @@ id | A comma-separated list of expression ID's to hide
 Hides all the expressions given as arguments to the instruction.
 Moves on to the next instruction immediately.
 
+--------------------------------------------------------------------------
+
 #### show \(\<id\>, \[\<id\>, ...\]\)
 Parameter | Description
   --- | ---
@@ -159,13 +161,19 @@ Parameter | Description
 Shows (un-hides) all the expressions given as arguments to the instruction.
 Moves on to the next instruction immediately.
 
+--------------------------------------------------------------------------
+
 #### hideLabel \(\<id\>, \[\<id\>, ...\]\)
 Parameter | Description
 --- | ---
 id | A comma-separated list of expression ID's
 
+--------------------------------------------------------------------------
+
 Turns off the label of all the expressions given as arguments to
 the instruction.  Moves on to the next instruction immediately.
+
+--------------------------------------------------------------------------
 
 #### showLabel \(\<id\>, \[\<id\>, ...\]\)
 Parameter | Description
@@ -175,14 +183,18 @@ id | A comma-separated list of expression ID's
 Turns on the label of all the expressions given as arguments to
 the instruction.  Moves on to the next instruction immediately.
 
-#### setLabel \(\<id\>, \<labelStr\>\)
+--------------------------------------------------------------------------
+
+#### setLabel \(\<id\>, \<labelString\>\)
 Parameter | Description
 --- | ---
 id | The ID of an expression with a label
-labelStr | The desired label string
+labelString | The desired label string
 
 Sets the label of the given expression to the given string.
 If the string uses latex, enclose the latex in back-ticks as usual.
+
+--------------------------------------------------------------------------
 
 #### setValue \(\<id\>, \<value\>, \[\<delay\>\]\)
 Parameter | Description
@@ -195,6 +207,8 @@ Replaces the `<value>` part of the given expression with the given value.
 The value can be any latex expression string or a number.  If the
 expression has a slider that is playing, it will be stopped first.
 
+--------------------------------------------------------------------------
+
 #### startSlider \(\<id\>, \[\<delay\>\]\)
 Parameter | Description
 --- | ---
@@ -203,6 +217,8 @@ delay | (optional) Number of milliseconds to delay before next instruction
 
 Equivalent to pressing the play button on a slider when it is not yet running.
 
+--------------------------------------------------------------------------
+
 #### stopSlider \(\<id\>, \[\<delay\>\]\)
 Parameter | Description
 --- | ---
@@ -210,6 +226,8 @@ id | The ID of an expression that has a slider
 delay | (optional) Number of milliseconds to delay before next instruction
 
 Equivalent to pressing the pause button on a slider when it is already running.
+
+--------------------------------------------------------------------------
 
 #### animateValue \(\<id\>, \<startVal\>, \<endVal\>, \<increment\>, \[\<frameTime\>\], \[\<delay\>\]\)
 Parameter | Description
@@ -230,12 +248,14 @@ blocks until the `endVal` is reached, unlike startSlider which moves on to
 the next instruction after the slider starts.  If the expression has a
 slider that is playing, it will be stopped first.
 
+--------------------------------------------------------------------------
+
 #### setSliderProperties \(\<id\>, \{\<properties\>\}, \[\<delay\>\]\)
 Parameter | Description
 --- | ---
 id | The ID of an expression with a slider
 properties | The properties to be set
-delay | Number of milliseconds to wait before next instruction
+delay | (optional) Number of milliseconds to wait before next instruction
 
 Sets the given properties of the given slider. Only the properties that you want to change need be specified. The properties are:
 
@@ -249,6 +269,73 @@ Sets the given properties of the given slider. Only the properties that you want
               "PLAY_FOREVER"
 
 For example: `setSliderProperties(val1, {min: 0, max: 10, step: 1, period: 8000, loopMode: "PLAY_ONCE"})`\
+
+--------------------------------------------------------------------------
+
+#### set \(\<id\>, \{\<properties\}\>, \[\<delay\>\]\)
+Parameter | Description
+--- | ---
+id | The ID of an expression to operate on
+properties | An object containing property/value pairs
+delay | (optional) Number of milliseconds to delay before next instruction
+
+This is a generic instruction to set any property on the given expression.
+See the API documentation of Calculator.setExpression to see what can
+be set.  Example properties parameter:  `{label: "Hi", showLabel: true}`.
+
+This instruction can be used to create a new expression, if the given ID does
+not currently exist and the `latex` property is provided.
+Note: if using this to set the `latex` property, this may not have any
+effect if the expression's slider is playing (even if it is set to "PLAY_ONCE"
+and has reached the maximum value).  Use stopSlider() beforehand, if necessary.
+
+-----------------------------------------------------------------------------
+
+#### stop \(\<messageString\>\)
+Parameter | Description
+--- | ---
+messageString | A message to display
+
+Causes the program to stop and display the given message string to the right of
+the control buttons.  This gives the opportunity to do manual changes to
+the graph.  The message can give instructions on what to do.  The program
+will resume and the message will disappear when the "Start" or "Step" button is clicked.
+
+--------------------------------------------------------------------------------
+
+#### pause \(\<delay\>\)
+Parameter | Description
+--- | ---
+delay | Number of milliseconds to pause
+
+This introduces a pause of the given duration into the program.  Although
+most instructions have a built-in ability to delay after running, some do not.
+
+-------------------------------------------------------------------------------
+
+#### label \(\<labelNameString\>\)
+Parameter | Description
+--- | ---
+labelNameString | The name of this label
+
+Not to be confused with a label on a graph element, this pseudo-instruction gives a name to
+a point in the program which can be used in a `goto` instruction.
+
+--------------------------------------------------------------------------------
+
+#### goto \(\<labelNameString\>, \[\<repeatCount\>\]\)
+Parameter | Description
+--- | ---
+labelNameString | The name of a label to jump to
+repeatCount | (optional) Number of times to execute the goto before igoring it
+
+Jumps to the specified label and decrements an internal count that
+is initialized to `repeatCount`.  If the internal count
+has reached zero, the count is reset to the original repeat value and
+execution proceeds with the next instruction.  This allows a set of instructions
+to be repeated the given number of times before moving on.  If another `goto` instruction loops back to before this one,
+it will be ready to repeat again, allowing nested repeat loops to work.
+To repeat indefinitely, omit the repeat count parameter or pass in a `repeatCount` of -1.
 
 ## Credits
 Thanks to GitHub users jared-hughes and FabriceNayret for their guidance, examples and ideas for improvement.
