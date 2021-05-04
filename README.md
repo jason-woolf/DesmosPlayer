@@ -331,4 +331,4 @@ it will be ready to repeat again, allowing nested repeat loops to work.
 To repeat indefinitely, omit the repeat count parameter or pass in a `repeatCount` of -1.
 
 ## Credits
-Thanks to GitHub users jared-hughes and FabriceNayret for their guidance, examples and ideas for improvement.
+Thanks to GitHub users @jared-hughes and @FabriceNayret for their guidance, examples and ideas for improvement.
