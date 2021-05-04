@@ -10,10 +10,10 @@ To initialize the system, you will need to call the function desmosPlayer() with
 To quickly give this a try, install the script in your browser and then visit these graphs:
 Graph Link | What It Is
 --- | ---
-<a target=_blank href="https://www.desmos.com/calculator/cqozvnbjy">MathyJaphy</a> | Animation of my YouTube channel logo, used in <a target=_blank href="https://youtu.be/sV1NbgNodD0">this video</a>.
-<a target=_blank href="https://www.desmos.com/calculator/hslbl39gnw">Binary Counter</a> | A demonstration of how one might use labels and goto's to do something interesting.
+<a target="_blank" href="https://www.desmos.com/calculator/cqozvnbjy3">MathyJaphy</a> | Animation of my YouTube channel logo, used in <a target="_blank" href="https://youtu.be/sV1NbgNodD0">this video</a>.
+<a target="_blank" href="https://www.desmos.com/calculator/hslbl39gnw">Binary Counter</a> | A demonstration of how one might use labels and goto's to do something interesting.
 
-And <a target=_blank href="https://youtu.be/xwhbT9Do1RQ">here is a video</a> that I created using desmosPlayer.
+And <a target="_blank" href="https://youtu.be/xwhbT9Do1RQ">here is a video</a> that I created using desmosPlayer.
 
 ## Documentation
 ### Overview
