@@ -19,6 +19,10 @@ Graph Link | What It Is
 
 And <a target="_blank" href="https://youtu.be/xwhbT9Do1RQ">here is a video</a> that I created using desmosPlayer.
 
+## Disclaimer
+
+This is my first forray into JavaScript and GitHub, so please be kind if there are bugs or non-conformant stylings.  😬
+
 ## Documentation
 
 ### Overview
