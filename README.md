@@ -8,7 +8,7 @@ When I started making short math videos using Desmos for the visuals, I would wr
 Install the file desmosPlayer.user.js in your browser using your favorite script manager and make sure the installed script is enabled.  Typically (e.g. with Tampermonkey installed) this is done by clicking on the file name above, then clicking "Raw" and then "Install".  Then navigate to any Desmos calculator graph.
 
 ## Usage
-To initialize the system, you will need to call the function desmosPlayer() with an array of instructions.  This can be done either by adding the call in the installed script itself, or by putting the same JavaScript code in the graph itself as a "note".  See below for complete details on how to write the instructions.  Once initialized, there will be some new buttons next to the "Save" button above the graph.  These include "Start", "Reset" and "Step" buttons, which control the execution of the instructions.
+To initialize the system, you will need to call the function desmosPlayer() with an array of instructions.  This can be done either by adding the call in the installed script itself, or by putting the same JavaScript code in the graph itself as a "note".  See the **Documentation** section below for complete details on how to write the instructions.  Once initialized, there will be some new buttons next to the "Save" button above the graph.  These include "Start", "Reset" and "Step" buttons, which control the execution of the instructions.
 
 ## Examples / Demos
 To quickly give this a try, install the script in your browser and then visit these graphs:
@@ -84,18 +84,18 @@ const exampleProgram = [
 desmosPlayer(exampleProgram, {graphTitle: "Demo", debugMode: true});
 ```
 
-There are two ways to create a program and call desmosPlayer() to load it.  One is to edit the desmosPlayer script (using your script manager's editor, for example) and insert this code somewhere within it. It can go near the top, right after the header comments.  The other is to put it in a "note" within the Desmos graph itself.  If a graph has a note with what looks like a call to `desmosPlayer()` within it, the desmosPlayer script will execute its contents as JavaScript when the graph is loaded.  If there are multiple notes with JavaScript code, only the first one will execute.
+There are two ways to create a program and call desmosPlayer() to load it.  One is to edit the desmosPlayer script (using your script manager's editor, for example) and insert this code somewhere within it. It can go near the top, right after the header comments.  The other is to put it in a "note" within the Desmos graph itself.  If a graph has a note with what looks like a call to `desmosPlayer()` within it, the desmosPlayer script will execute its contents as JavaScript when the graph is loaded.  If there are multiple notes with JavaScript code, only the first one will execute automatically.
 
 > :bulb: Tip: JavaScript notes can be executed manually by selecting the expression containing the note and typing ctrl-shift-Q.  This resets the graph to its initial state and runs the code.  This makes it easy to modify the program and re-run it.
 
-> :bulb: Tip: Desmos currently does not have a way to type a newline character into a note. The program can be written in a separate text editor and then copy/pasted into the note.
+> :bulb: Tip: Desmos currently does not have a way to type a newline character into a note. To avoid putting the entire script on one line, write the code in a separate text editor and then copy/paste it into the note.
 
 ### Buttons
 
 When desmosPlayer has been called and a program is loaded and ready to run, a "Start" button will be added next to the "Save" button.
 Clicking it will start the program and turn it into a "Stop"
 button.  Clicking it again will stop execution of the program.  A
-"Reset" button will also appear which when clicked will put the graph and
+"Reset" button will also appear. When clicked, it will put the graph and
 the running program back to their initial states so that the program can
 be run again.
 
@@ -113,14 +113,14 @@ since it saves the entire graph state after every step.
 ### Running the Program
 
 When the "Start" button is pressed, execution of the instructions proceeds automatically from one to the next.
-The pause() instruction can be used to insert delays.  Also, most
+The `pause()` instruction can be used to insert delays.  Also, most
 instructions take an optional delay value as the final parameter which
-inserts a pause implicitly.
+inserts an implicit `pause()` after the instruction has run.
 
 Instructions can be grouped together using square brackets.  Instructions
 in such groupings will be run without delays and without giving Desmos a
 chance to update its graph until they have all run.  This can eliminate
-glitches in the graph and make it look as though the instructions ran
+glitches in the animation and make it look as though the instructions ran
 simultaneously.  For example:
 
     const testProg = [
@@ -143,7 +143,7 @@ When each instruction is executed, a message is displayed in the console
 so it is possible to see what the program is doing.  When back-stepping,
 the console will show the instruction that was just undone.
 
-Here is a summary of the instructions.  Detailed descriptions appear below.
+### Instruction Functions
 
     hide (<id>, [<id>, ...])
     show (<id>, [<id>, ...])
@@ -161,7 +161,7 @@ Here is a summary of the instructions.  Detailed descriptions appear below.
     label (<labelNameString>)
     goto (<labelNameString>, [<repeatCount>])
 
-### Instruction Functions
+--------------------------------------------------------------------------
 
 **hide \(\<id\>, \[\<id\>, ...\]\)<br>
 show \(\<id\>, \[\<id\>, ...\]\)<br>
@@ -261,7 +261,7 @@ Sets the given properties of the given slider. Only the properties that you want
               "PLAY_ONCE" or
               "PLAY_FOREVER"
 
-For example: `setSliderProperties(val1, {min: 0, max: 10, step: 1, period: 8000, loopMode: "PLAY_ONCE"})`\
+For example: `setSliderProperties(val1, {min: 0, max: 10, step: 1, period: 8000, loopMode: "PLAY_ONCE"})`
 
 --------------------------------------------------------------------------
 
