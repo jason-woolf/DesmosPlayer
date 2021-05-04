@@ -1,24 +1,29 @@
 # DesmosPlayer
 Program the action in your Desmos graph to create animations for videos, presentations, etc.
+
 ## Introduction
 When I started making short math videos using Desmos for the visuals, I would write down the sequence of actions I needed to perform on the expressions while doing a screen capture.  For example:  1) Show expression "1"; 2) Start slider for expression "1"; 3) Hide expression "1" and show expression "2"; and so on.  As my videos got longer and more involved, this became quite tedious.  If only there were a way to program those actions so it would just happen automatically.  Well, that is what DesmosPlayer will do.  You create a list of these actions, including pauses to get the timing right, and then click a button to start it running.
+
 ## Installation
 Install the file desmosPlayer.user.js in your browser using your favorite script manager and make sure the installed script is enabled.  Typically (e.g. with Tampermonkey installed) this is done by clicking on the file name above, then clicking "Raw" and then "Install".  Then navigate to any Desmos calculator graph.
+
 ## Usage
 To initialize the system, you will need to call the function desmosPlayer() with an array of instructions.  This can be done either by adding the call in the installed script itself, or by putting the same JavaScript code in the graph itself as a "note".  See below for complete details on how to write the instructions.  Once initialized, there will be some new buttons next to the "Save" button above the graph.  These include "Start", "Reset" and "Step" buttons, which control the execution of the instructions.
+
 ## Examples / Demos
 To quickly give this a try, install the script in your browser and then visit these graphs:
 Graph Link | What It Is
 --- | ---
 <a target="_blank" href="https://www.desmos.com/calculator/rnzfxhdzqu">MathyJaphy</a> | Animation of my YouTube channel logo, used in <a target="_blank" href="https://youtu.be/sV1NbgNodD0">this video</a>.
-<a target="_blank" href="https://www.desmos.com/calculator/hslbl39gnw">Binary Counter</a> | A demonstration of how one might use labels and goto's to do something interesting.
+<a target="_blank" href="https://www.desmos.com/calculator/hslbl39gnw">Binary Counter</a> | A demonstration of how one might use labels and goto instructions.
 
 And <a target="_blank" href="https://youtu.be/xwhbT9Do1RQ">here is a video</a> that I created using desmosPlayer.
 
 ## Documentation
+
 ### Overview
 
-This system allows you to write a simple piece of JavaScript code that defines a program, a sequence of actions to perform on a Desmos graph.  The main element of that code is a call to a function called `desmosPlayer()`.
+This system allows you to write a simple piece of JavaScript code that defines a program, a sequence of actions to perform on a Desmos graph.  The main element of that code is a call to the function `desmosPlayer()`.
 
 #### desmosPlayer (\<program\>, [\{\<properties\>\}])
 
@@ -144,7 +149,7 @@ Here is a summary of the instructions.  Detailed descriptions appear below.
     show (<id>, [<id>, ...])
     hideLabel (<id>, [<id>, ...])
     showLabel (<id>, [<id>, ...])
-    setLabel (<id>, <labelString>)
+    setLabel (<id>, <labelString>, [<delay>])
     setValue (<id>, <value>, [<delay>])
     startSlider (<id>, [<delay>])
     stopSlider (<id>, [<delay>])
@@ -166,17 +171,18 @@ Parameter | Description
 --- | ---
 \<id\> | A comma-separated list of expression ID's
 
-Hides or shows all the expressions, or the labels of the expressions, given as arguments to the instruction.
+Hides or shows the expressions or labels of the expressions given as arguments to the instruction.
 For `hide()` and `show()`, the ID can be for a folder as well as an individual expression.
 These functions do not take an optional delay parameter like most others.
 
 --------------------------------------------------------------------------
 
-#### setLabel \(\<id\>, \<labelString\>\)
+#### setLabel \(\<id\>, \<labelString\>\, [\<delay\>])
 Parameter | Description
 --- | ---
 \<id\> | The ID of an expression with a label
 \<labelString\> | The desired label string
+\<delay\> | (optional) Number of milliseconds to delay before next instruction
 
 Sets the label of the given expression to the given string.
 If the string uses latex, enclose the latex in back-ticks as usual.
