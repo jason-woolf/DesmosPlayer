@@ -19,7 +19,9 @@ Graph Link | What It Is
 
 And <a target="_blank" href="https://youtu.be/xwhbT9Do1RQ">here is a video</a> that I created using desmosPlayer.
 
-## Disclaimer
+## Disclaimers
+
+This system will automatically run notes in a graph as JavaScript if they contain the string "desmosPlayer". Due to the risk of running malicious code in an unknown graph, the desmosPlayer script should perhaps be disabled in your script manager until you have loaded the unknown graph and examined the code yourself.
 
 This is my first forray into JavaScript and GitHub, so please be kind if there are bugs or non-conformant stylings.  😬
 
