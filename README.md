@@ -269,7 +269,7 @@ For example: `setSliderProperties(val1, {min: 0, max: 10, step: 1, period: 8000,
 
 --------------------------------------------------------------------------
 
-#### set \(\<id\>, \{\<properties\}\>, \[\<delay\>\]\)
+#### set \(\<id\>, \{\<properties\>\}, \[\<delay\>\]\)
 Parameter | Description
 --- | ---
 \<id\> | The ID of an expression to operate on
@@ -324,7 +324,7 @@ a point in the program which can be used in a `goto` instruction.
 Parameter | Description
 --- | ---
 \<labelNameString\> | The name of a label to jump to
-\<repeatCount\> | (optional) Number of times to execute the goto before igoring it
+\<repeatCount\> | (optional) Number of times to execute the goto before ignoring it
 
 Jumps to the specified label and decrements an internal count that
 is initialized to `repeatCount`.  If the internal count
