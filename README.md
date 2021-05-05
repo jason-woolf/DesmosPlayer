@@ -147,6 +147,11 @@ When each instruction is executed, a message is displayed in the console
 so it is possible to see what the program is doing.  When back-stepping,
 the console will show the instruction that was just undone.
 
+> :bulb: Tip: You can skip through the program quickly by repeatedly clicking the "Step" button.  This can be helpful when debugging a section of the program that is not near the start. When single-stepping, pauses and delays are ignored.  Also, `animateValue()` instructions go straight to the final value and finish if the "Step" button is clicked again while they are running.
+
+> :bulb: Tip: To jump directly to a section of the program that you want to debug, you can add labels and a `goto()` instruction at the start of the program. But without executing all prior instructions, the graph may not be in a useful state when it gets there.
+
+
 ### Instruction Functions
 
     hide (<id>, [<id>, ...])
