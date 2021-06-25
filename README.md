@@ -9,7 +9,9 @@ When I started making short math videos using Desmos for the visuals, I would wr
 Install the file desmosPlayer.user.js in your browser using your favorite script manager and make sure the installed script is enabled.  Typically (e.g. with Tampermonkey installed) this is done by clicking on the file name above, then clicking "Raw" and then "Install".  Then navigate to any Desmos calculator graph.
 
 ## Usage
-To initialize the system, you will need to call the function desmosPlayer() with an array of instructions.  This can be done either by adding the call in the installed script itself, or by putting the same JavaScript code in the graph itself as a "note".  See the **Documentation** section below for complete details on how to write the instructions.  Once initialized, there will be some new buttons next to the "Save" button above the graph.  These include "Start", "Reset" and "Step" buttons, which control the execution of the instructions.
+When desmosPlayer is installed, a new kind of expression, a "program", is added to the "+" menu.  A program is a container for text, much like a "note".  In it, you enter javascript code that when executed will load an array of instructions into the desmosPlayer system so that you can exectue those instructions.  See the **Documentation** section below for complete details on how to write the instructions.  Once the instructions are loaded, there will be some new buttons next to the "Save" button above the graph: "Start", "Reset", "Step", and (optionally) "Back Step".  These control the execution of the instructions.
+
+When a program is added to the expression list, it contains a sample program to get you started with the proper syntax and format.  The most important line is the last one which is a call to the function desmosPlayer().
 
 ## Examples / Demos
 To quickly give this a try, install the script in your browser and then visit these graphs:
