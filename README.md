@@ -3,18 +3,23 @@ Program the action in your Desmos graph to create animations for videos, present
 
 ![Intro Screenshot](MJScreenshot.png)
 ## Introduction
-When I started making short math videos using Desmos for the visuals, I would write down the sequence of actions I needed to perform on the expressions while doing a screen capture.  For example:  1) Show expression "1"; 2) Start slider for expression "1"; 3) Hide expression "1" and show expression "2"; and so on.  As my videos got longer and more involved, this became quite tedious.  If only there were a way to program those actions so it would just happen automatically.  Well, that is what DesmosPlayer will do.  You create a list of these actions, including pauses to get the timing right, and then click a button to start it running.
+When I started making short math videos using Desmos for the visuals, I would write down the sequence of actions I needed to perform on the expressions while doing a screen capture.  For example:  1) Unhide first expression; 2) Start slider for variable A; 3) Hide first expression and show second expression; and so on.  As my videos got longer and more involved, this became quite tedious.  I needed a way to program those actions so it would just happen automatically.  That is what DesmosPlayer will do.  You create a list of these actions, including pauses to get the timing right, and then click a button to start it running.
 
 ## Installation
 Install the file desmosPlayer.user.js in your browser using your favorite script manager and make sure the installed script is enabled.  Typically (e.g. with Tampermonkey installed) this is done by clicking on the file name above, then clicking "Raw" and then "Install".  Then navigate to any Desmos calculator graph.
 
 ## Usage
-When desmosPlayer is installed, a new kind of expression, a "program", is added to the "+" menu.  A program is a container for text, much like a "note".  In it, you enter javascript code that when executed will load an array of instructions into the desmosPlayer system so that you can exectue those instructions.  See the **Documentation** section below for complete details on how to write the instructions.  Once the instructions are loaded, there will be some new buttons next to the "Save" button above the graph: "Start", "Reset", "Step", and (optionally) "Back Step".  These control the execution of the instructions.
+When desmosPlayer is installed, a new kind of expression, a "program", is added to the "+" menu.  A program is a container for text, much like a "note".  It contains javascript code that you write which defines an array of instructions to control elements of your graph. When your javascript code is executed, the array of instructions is loaded into the desmosPlayer system.
 
-When a program is added to the expression list, it contains a sample program to get you started with the proper syntax and format.  The most important line is the last one which is a call to the function desmosPlayer().
+![Program in menu](Screenshots/progmenu.png)
+
+When a program is added to the expression list, it contains a sample program to get you started with the proper syntax and format.  You will replace this code with your own definitions and instruction array(s).  To the left of the text is a circular icon which you will click to execute the program code.  If the code runs successfully, the icon turns green, meaning your instructions have been loaded. Buttons will appear above the graph next to the "Save" button which let you control the execution of these instructions.  If there is an error, the icon will turn red, and you can check the console for an error message, edit the program and try again.
+
+![Sample program](Screenshots/progsample.png)
 
 ## Examples / Demos
-To quickly give this a try, install the script in your browser and then visit these graphs:
+To quickly give this a try, install the script in your browser and then visit these graphs. Each one has a program.  Click the circular icon next to it, and then click the "Start" button that appears next to the "Save" button.
+
 Graph Link | What It Is
 --- | ---
 <a target="_blank" href="https://www.desmos.com/calculator/rnzfxhdzqu">MathyJaphy</a> | Animation of my YouTube channel logo, used in <a target="_blank" href="https://youtu.be/sV1NbgNodD0">this video</a>.
@@ -24,7 +29,7 @@ And <a target="_blank" href="https://youtu.be/xwhbT9Do1RQ">here is a video</a> t
 
 ## Disclaimers
 
-This system will automatically run notes in a graph as JavaScript if they contain the string "desmosPlayer". Due to the risk of running malicious code in an unknown graph, the desmosPlayer script should perhaps be disabled in your script manager until you have loaded the unknown graph and examined the code yourself.
+Due to the risk of running malicious code in an unknown graph, you should always inspect the code before running it by clicking the program icon.
 
 This is my first forray into JavaScript and GitHub, so please be kind if there are bugs or non-conformant stylings.  😬
 
@@ -45,23 +50,18 @@ This is the main function of the DesmosPlayer module.  It loads the given progra
 You create a program by filling an array with the results of "instruction functions" (see examples below), then pass this program
 to `desmosPlayer()`, along with optional properties:
 
-     graphTitle: A string value that has to match the title of the graph
-                 in order for the system to be activated.
-     allowSave:  If set to true, do not disable the "save" button after
-                 the program has started.  It is normally disabled to
-                 prevent accidental modification to the initial state.
      debugMode:  Set to 'true' to enable back-stepping.
 
 ### The Program
 
-The instructions in a program array are generated by calling instruction functions.  Most of these functions take an `<id>` parameter
+The instructions in a program array are function calls.  Most of these functions take an `<id>` parameter
 to indicate which expression(s) in the graph to operate on.  Each expression in a Desmos graph has a unique ID which is a string.
 They are normally numeric strings, and so numeric syntax can be used instead of string syntax.  The ID
 could be a non-numeric string if the expression is created by your program (see the `set()` instruction function below).
 
 > :warning: Note: The ID is not the same as the index of the expression.
 
-> :bulb: Tip: To find the ID of an expression, select that expression in the graph and type ctrl-Q.  The ID will be printed in the console window.
+> :bulb: Tip: To find the ID of an expression, click on the expression while holding down the ctrl key (windows) or the command key (mac).  The ID will be printed in the console and copied to the clipboard so you can easily paste it into your program.  See the ##Usability## section below for more details.
 
 Here is an example of a program script that you would write:
 
@@ -90,34 +90,18 @@ const exampleProgram = [
 ]
 
 // Load it
-desmosPlayer(exampleProgram, {graphTitle: "Demo", debugMode: true});
+desmosPlayer(exampleProgram, {debugMode: true});
 ```
-
-There are two ways to create a program and call desmosPlayer() to load it.  One is to edit the desmosPlayer script (using your script manager's editor, for example) and insert this code somewhere within it. It can go near the top, right after the header comments.  The other is to put it in a "note" within the Desmos graph itself.  If a graph has a note with what looks like a call to `desmosPlayer()` within it, the desmosPlayer script will execute its contents as JavaScript when the graph is loaded.  If there are multiple notes with JavaScript code, only the first one will execute automatically.
-
-> :bulb: Tip: JavaScript notes can be executed manually by selecting the expression containing the note and typing ctrl-shift-Q.  This resets the graph to its initial state and runs the code.  This makes it easy to modify the program and re-run it.
-
-> :bulb: Tip: Desmos currently does not have a way to type a newline character into a note. To avoid putting the entire script on one line, write the code in a separate text editor and then copy/paste it into the note.
 
 ### Buttons
 
-When desmosPlayer has been called and a program is loaded and ready to run, a "Start" button will be added next to the "Save" button.
-Clicking it will start the program and turn it into a "Stop"
-button.  Clicking it again will stop execution of the program.  A
-"Reset" button will also appear. When clicked, it will put the graph and
-the running program back to their initial states so that the program can
-be run again.
+When desmosPlayer has been called and a program is loaded and ready to run, a "Start" button will be added next to the "Save" button. Clicking it will start the program and turn it into a "Stop" button.  Clicking it again will stop execution of the program.  A "Reset" button will also appear. When clicked, it will reset the program so that it starts over from the beginning.
 
-> :bulb: Tip: if the save button is accidentally used
-> to overwrite the original graph after the program has run, hit the
-> "Reset" button and save again.
-    
-There is also a "Step"
-button which will execute one function in the program at a time.  If
-debugMode is true, then a "Back Step" button also appears after the
-program has started, allowing you to undo the effect of the previous
-step, all the way back to the start of the program. This is expensive
-since it saves the entire graph state after every step.
+> :bulb: Tip: The "Reset" button will not reset the graph itself to its initial state. The original version of desmosPlayer did this, but changes made to the graph after running the program were overwritten by the saved graph state. Instead, you now need to start your program with instructions that reset all graph elements that your program changes.
+
+There is also a "Step" button which will execute one function in the program at a time.  If `debugMode` is true, then a "Back Step" button also appears after the program has started, allowing you to undo the effect of the previous step, all the way back to the start of the program. This is implemented by saving the entire graph state after every instruction is executed, and restoring the previous state when the button is clicked.  This is expensive and may introduce a tiny bit of lag.  When you are done creating and debugging your program, consider setting `debugMode` to `false`.
+
+> :bulb: Tip: The "Back Step" button will erase any changes you've made to the graph since the previous instruction was executed. To help prevent accidental loss of graph changes, the "Back Step" button will turn red if the system recognizes that you've made changes that would be lost if you click it.  Clicking the "Back Step" button will not overwrite changes that you have made to programs.
 
 ### Running the Program
 
