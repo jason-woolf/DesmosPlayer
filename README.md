@@ -61,7 +61,7 @@ could be a non-numeric string if the expression is created by your program (see 
 
 > :warning: Note: The ID is not the same as the index of the expression.
 
-> :bulb: Tip: To find the ID of an expression, click on the expression while holding down the ctrl key (Windows) or the command key (Mac).  The ID is printed in the console and copied to the clipboard so you can easily paste it into your program.  See the ##Usability Features## section below for more details.
+> :bulb: Tip: To find the ID of an expression, click on the expression while holding down the Ctrl key (Windows) or the Command key (Mac).  The ID is printed in the console and copied to the clipboard so you can easily paste it into your program.  See the Usability Features section below for more details.
 
 Here is an example of a program script that you would write:
 
@@ -109,15 +109,15 @@ desmosPlayer has some convenience features to help with developing your program.
 
 #### Finding an expression's ID
 
-Every program needs to refer to expressions by their ID, which is not normally accessible. With desmosPlayer, you can get at an expression's ID by holding down the ctrl key (Windows) or the command key (Mac) while clicking on and expression.  The expression's index and ID will be displayed in the console, and the ID will be copied to the clipboard so that you can then go to your program and paste it.
+Every program needs to refer to expressions by their ID, which is not normally accessible. With desmosPlayer, you can get at an expression's ID by holding down the Ctrl key (Windows) or the Command key (Mac) while clicking on an expression.  The expression's index and ID will be displayed in the console, and the ID will be copied to the clipboard so that you can easily paste it into your program text.
 
 #### Finding an expression from an ID in your program
 
-While developing your presentation, you might want to find the graph expression corresponding to an ID that you have added to your program.  To do this, select the ID string in your program and click on the selected text while holding down the ctrl key (Windows) or the command key (Mac).  The corresponding expression will be selected and scrolled into view.  If your program is loaded, this also works if you select the symbolic name that you have defined for an expression ID!
+While developing your program, you might want to know which graph expression corresponds to an ID that you have added to your program.  To find out, select the ID string in your program and click on the selected text while holding down the Ctrl key (Windows) or the Command key (Mac).  The corresponding expression will be selected and scrolled into view.  If your program is loaded, this also works when you select the symbolic name that you have defined for an expression ID!
 
 #### Searching for text within your program
 
-If your program has many lines, you might want some assistance finding text within it. Typically, you might want to find all the references to a particular ID or the symbolic name you defined for it.  Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrances of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the alt key (Windows) or option key (Mac).  The next occurrance of that string will become the new selection and will scroll into view if necessary.  The search will wrap around when it reaches the end without finding it. To search backwards, also hold down the ctrl key (Windows) or the command key (Mac).
+If your program has many lines, you might want some assistance finding text within it. Typically, you might want to find all the references to a particular ID or the symbolic name you defined for it.  Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrances of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the Alt key (Windows) or Option key (Mac).  The next occurrance of that string will become the new selection and will scroll into view if necessary.  The search will wrap around if it reaches the end without finding it. To search backwards, also hold down the Ctrl key (Windows) or the Command key (Mac) (i.e. ctrl-alt-click or command-option-click).
 
 ### Running the Program
 
