@@ -8,6 +8,9 @@ When I started making short math videos using Desmos for the visuals, I would wr
 ## Installation
 Install the file desmosPlayer.user.js in your browser using your favorite script manager and make sure the installed script is enabled.  Typically (e.g. with Tampermonkey installed) this is done by clicking on the file name above, then clicking "Raw" and then "Install".  Then navigate to any Desmos calculator graph.
 
+To install Tampermonkey on Chrome (free and recommended), go to https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo and click the "install"
+ button. Look for the Tampermonkey icon to the right of the URL bar at the top of the Chrome window, click it, and make sure the drop-down menu indicates that it is enabled.
+
 ## Usage
 When desmosPlayer is installed, a new kind of expression, a "program", is added to the "+" menu.  A program is a container for text, much like a "note".  It contains javascript code that you write which defines an array of instructions to control elements of your graph. When your javascript code is executed, the array of instructions is loaded into the desmosPlayer system.
 
@@ -18,16 +21,17 @@ When a program is added to the expression list, it contains a sample program to 
 ![Sample program](Screenshots/progsample.png)
 
 ## Examples / Demos
-To quickly give this a try, install the script in your browser and then visit these graphs. Each one has a program.  Click the circular icon next to it, and then click the "Start" button that appears next to the "Save" button.
+To quickly give this a try, install desmosPlayer in your browser and then visit these graphs. Each one has a program.  Click the circular icon next to it, and then click the "Start" button that appears next to the "Save" button.
 
 Graph Link | What It Is
 --- | ---
 <a target="_blank" href="https://www.desmos.com/calculator/rnzfxhdzqu">MathyJaphy</a> | Animation of my YouTube channel logo, used in <a target="_blank" href="https://youtu.be/sV1NbgNodD0">this video</a>.
 <a target="_blank" href="https://www.desmos.com/calculator/hslbl39gnw">Binary Counter</a> | A demonstration of how one might use labels and goto instructions.
-
-And <a target="_blank" href="https://youtu.be/xwhbT9Do1RQ">here is a video</a> that I created using desmosPlayer.
+<a target="_blank" href="">Ptolemy's Theorem</a> | The graph used to make <a target="_blank" href="">this video</a>.
 
 ## Disclaimers
+
+Tested only on Chrome and Safari.  May have issues on other browsers.
 
 Due to the risk of running malicious code in an unknown graph, you should always inspect the code before running it by clicking the program icon.
 
@@ -56,12 +60,12 @@ to `desmosPlayer()`, along with optional properties:
 
 The instructions in a program array are function calls.  Most of these functions take an `<id>` parameter
 to indicate which expression(s) in the graph to operate on.  Each expression in a Desmos graph has a unique ID which is a string.
-They are normally numeric strings, and so numeric syntax can be used instead of string syntax.  The ID
+It is normally a numeric string, and so numeric syntax can be used instead of string syntax.  The ID
 could be a non-numeric string if the expression is created by your program (see the `set()` instruction function below).
 
 > :warning: Note: The ID is not the same as the index of the expression.
 
-> :bulb: Tip: To find the ID of an expression, click on the expression while holding down the Ctrl key (Windows) or the Command key (Mac).  The ID is printed in the console and copied to the clipboard so you can easily paste it into your program.  See the Usability Features section below for more details.
+> :bulb: Tip: To find the ID of an expression, click on the expression while holding down the Ctrl key (Windows) or the Command key (Mac).  The ID is printed in the console and copied to the clipboard so you can easily paste it into your program.  See the section on Usability Features below for more details.
 
 Here is an example of a program script that you would write:
 
@@ -93,15 +97,19 @@ const exampleProgram = [
 desmosPlayer(exampleProgram, {debugMode: true});
 ```
 
+Note that you can have more than one program in your graph.  Only one can be loaded at a time.
+
 ### Buttons
+
+When you are ready to run your program, click the circular program icon to the left of the program text.  If all goes well, it will turn green to indicate that the program is loaded, and the "Start", "Reset", "Step" and (optionally) "Back Step" buttons will appear.  The "Reset" and "Back Step" buttons are disabled until you have run at least one instruction.  If there is an error, which may occur immediately or after executing and instruction with an invalid ID, that icon will turn red.  When this happens, you can open the console to find the error message.  In some cases, you can easily find the problem.  But sometimes it is tricky. It helps to be familiar with the developer tools in your browser. If it is not clear what the problem is, check for common syntax mistakes like forgetting to put a comma between instruction functions.  When you change the program text the program icon will return to its uncolored state to indicate that the program has changed since it was loaded, and can be loaded again.
 
 When desmosPlayer has been called and a program is loaded and ready to run, a "Start" button will be added next to the "Save" button. Clicking it will start the program and turn it into a "Stop" button.  Clicking it again will stop execution of the program.  A "Reset" button will also appear. When clicked, it will reset the program so that it starts over from the beginning.
 
-> :bulb: Tip: The "Reset" button will not reset the graph itself to its initial state. The original version of desmosPlayer did this, but changes made to the graph after running the program were overwritten by the saved graph state. Instead, you now need to start your program with instructions that reset all graph elements that your program changes.
+> :bulb: Tip: The "Reset" button will not reset the graph itself to its initial state. The original version of desmosPlayer did this, but changes made to the graph after running the program were overwritten by the saved graph state. Instead, you now need to start your program with instructions that reset all graph elements that your program changes. See the section on Usability Features for more details on this recommendation.
 
-There is also a "Step" button which will execute one function in the program at a time.  If `debugMode` is true, then a "Back Step" button also appears after the program has started, allowing you to undo the effect of the previous step, all the way back to the start of the program. This is implemented by saving the entire graph state after every instruction is executed, and restoring the previous state when the button is clicked.  This is expensive and may introduce a tiny bit of lag.  When you are done creating and debugging your program, consider setting `debugMode` to `false`.
+There is also a "Step" button which will execute one function in the program at a time.  If `debugMode` is true, then a "Back Step" button also appears after the program has started, allowing you to undo the effect of the previous step, all the way back to the start of the program. This is implemented by saving the entire graph state after every instruction is executed, and restoring the previous state when the button is clicked.  This is expensive and may introduce a tiny bit of lag (though I have yet to observe this).  When you are done creating and debugging your program, consider setting `debugMode` to `false`.
 
-> :bulb: Tip: The "Back Step" button will erase any changes you've made to the graph since the previous instruction was executed. To help prevent accidental loss of graph changes, the "Back Step" button will turn red if the system recognizes that you've made changes that would be lost if you click it.  Clicking the "Back Step" button will not overwrite changes that you have made to programs.
+> :bulb: Tip: The "Back Step" button will erase any changes you've made to the graph since the previous instruction was executed. To help prevent accidental loss of graph changes, the "Back Step" button will turn red if the system recognizes that you've made changes that would be lost if you click it.  Clicking the "Back Step" button will not overwrite changes that you have made to programs.  See the section on Usability Features for more details.
 
 ### Running the Program
 
@@ -132,7 +140,7 @@ within the grouped commands are ignored, and `animateValue()` instructions
 will go directly to the ending value.  It is an error to have a `goto()`
 instruction inside a grouping.
 
-When each instruction is executed, a message is displayed in the console
+> :bulb: Tip: When each instruction is executed, a message is displayed in the console
 so it is possible to see what the program is doing.  When back-stepping,
 the console will show the instruction that was just undone.
 
@@ -159,13 +167,13 @@ If your program has many lines, you might want some assistance finding text with
 
 #### Saving your work
 
-Losing important changes by resetting the graph, or by back-stepping, or by reloading the graph in order to start from scratch, was a frustrating aspect of developing graphs and their programs in the first version of desmosPlayer.  This version has changes meant to reduce the chance that this will happen.
+Losing important changes by resetting the graph, or by back-stepping, or by reloading the graph in order to start from scratch, was a frustrating aspect of developing graphs and their programs in the first version of desmosPlayer.  This version has changes meant to reduce the chance that this will happen. 
 
-To help you recognize when you have made changes to the graph that you might want to save, desmosPlayer tries to distinguish changes you make by hand from changes made by running the program instructions.  Changes to the graph made by running your program instructions do not enable the "Save" button.  Of course, when you do use the "Save" button, the current state of the graph will be saved, whether it got there by your instructions running or by manual graph changes, or both.
+To help you recognize when you have made changes to the graph that you might want to save, desmosPlayer will not enable the "Save" button for graph changes made by running your instructions.  In other words, if the "Save" button is enabled, there is a change that you made by hand which you should consider saving.  Of course, when you do use the "Save" button, the current state of the graph will be saved, whether it got there by your instructions running or by manual graph changes, or both.
 
-The "Reset" button will not change the state of the graph.  It only resets the program so that it runs from the beginning.  This makes the "Reset" button less destructive, but it means that you need a way to get the graph back into its initial state before you run after a reset. Restoring a saved version of the graph would also destroy changes you've made that you might want to save.  Therefore, it is recommended that you always start your program with instructions that reset any changes your program makes to graph elements.  Whenever you introduce a new expression ID to the program, take a moment to add an instruction that would reset any changes that you plan to make to that expression.  The initialization instructions can be in one or more separate program arrays to distinguish them from the main program.  The initialization arrays can be included at the start of your main program array so that they always execute at the start (see the example graph for "Ptolemy's Theorem").
+The "Back Step" button restores a previously saved graph state, so it will overwrite any changes you have made by hand!  To help recognize when this could happen, the "Back Step" button will turn red when desmosPlayer thinks that clicking it would overwrite something you changed.  (Note that the text of your programs is not overwritten when back-stepping, so the button will not turn red for program changes.)  The red color is just a warning.  The changes you made may be insignificant and would not be missed if you click the button while it is red.
 
-The "Back Step" button does restore a previously saved graph state, so it will overwrite any changes you've made by hand.  To help recognize when this could happen, the "Back Step" button will turn red when desmosPlayer thinks that clicking it would destroy your changes.  Note that the text of your programs is not overwritten when back-stepping, so the button will not turn red for program changes.  The red color is just a warning.  The changes you made may be insignificant and would not be missed if you click the button while it is red.
+The "Reset" button does not restore the original state of the graph.  It only resets the program so that it runs from the beginning.  This makes the "Reset" button less destructive, but it means that you need a way to get the graph back into its initial state before you run after a reset. Note that restoring a saved version of the graph would also destroy changes you've made that you might want to save.  Therefore, it is recommended that you always start your program with instructions that reset any changes your program makes to graph elements.  Whenever you introduce a new expression ID to the program, take a moment to add an instruction that would reset any changes that you plan to make to that expression.  The initialization instructions can be in one or more separate program arrays to distinguish them from the main program.  The initialization arrays can be included at the start of your main program array so that they always execute after a reset (see the example graph for "Ptolemy's Theorem").  If you follow this recommendation, then you can save the graph whenever you make a change that you want to keep, no matter what state the graph is in when you save it.  Save early and often!
 
 ### Instruction Functions
 
