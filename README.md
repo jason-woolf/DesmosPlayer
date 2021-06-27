@@ -103,22 +103,6 @@ There is also a "Step" button which will execute one function in the program at 
 
 > :bulb: Tip: The "Back Step" button will erase any changes you've made to the graph since the previous instruction was executed. To help prevent accidental loss of graph changes, the "Back Step" button will turn red if the system recognizes that you've made changes that would be lost if you click it.  Clicking the "Back Step" button will not overwrite changes that you have made to programs.
 
-### Usability Features
-
-desmosPlayer has some convenience features to help with developing your program.
-
-#### Finding an expression's ID
-
-Every program needs to refer to expressions by their ID, which is not normally accessible. With desmosPlayer, you can get at an expression's ID by holding down the Ctrl key (Windows) or the Command key (Mac) while clicking on an expression.  The expression's index and ID will be displayed in the console, and the ID will be copied to the clipboard so that you can easily paste it into your program text.
-
-#### Finding an expression from an ID in your program
-
-While developing your program, you might want to know which graph expression corresponds to an ID that you have added to your program.  To find out, select the ID string in your program and click on the selected text while holding down the Ctrl key (Windows) or the Command key (Mac).  The corresponding expression will be selected and scrolled into view.  If your program is loaded, this also works when you select the symbolic name that you have defined for an expression ID!
-
-#### Searching for text within your program
-
-If your program has many lines, you might want some assistance finding text within it. Typically, you might want to find all the references to a particular ID or the symbolic name you defined for it.  Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrances of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the Alt key (Windows) or Option key (Mac).  The next occurrance of that string will become the new selection and will scroll into view if necessary.  The search will wrap around if it reaches the end without finding it. To search backwards, also hold down the Ctrl key (Windows) or the Command key (Mac) (i.e. ctrl-alt-click or command-option-click).
-
 ### Running the Program
 
 When the "Start" button is pressed, execution of the instructions proceeds automatically from one to the next.
@@ -157,6 +141,32 @@ the console will show the instruction that was just undone.
 > :bulb: Tip: To jump directly to a section of the program that you want to debug, you can add labels and a `goto()` instruction at the start of the program. But without executing all prior instructions, the graph may not be in a useful state when it gets there.
 
 
+### Usability Features
+
+desmosPlayer has some convenience features to help with developing your program.
+
+#### Finding an expression's ID
+
+Every program needs to refer to expressions by their ID, which is not normally accessible. With desmosPlayer, you can get at an expression's ID by holding down the Ctrl key (Windows) or the Command key (Mac) while clicking on an expression.  The expression's index and ID will be displayed in the console, and the ID will be copied to the clipboard so that you can easily paste it into your program text.
+
+#### Finding an expression from an ID in your program
+
+While developing your program, you might want to know which graph expression corresponds to an ID that you have added to your program.  To find out, select the ID string in your program and click on the selected text while holding down the Ctrl key (Windows) or the Command key (Mac).  The corresponding expression will be selected and scrolled into view.  If your program is loaded, this also works when you select the symbolic name that you have defined for an expression ID!
+
+#### Searching for text within your program
+
+If your program has many lines, you might want some assistance finding text within it. Typically, you might want to find all the references to a particular ID or the symbolic name you defined for it.  Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrances of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the Alt key (Windows) or Option key (Mac).  The next occurrance of that string will become the new selection and will scroll into view if necessary.  The search will wrap around if it reaches the end without finding it. To search backwards, also hold down the Ctrl key (Windows) or the Command key (Mac) (i.e. ctrl-alt-click or command-option-click).
+
+#### Saving your work
+
+Losing important changes by resetting the graph, or by back-stepping, or by reloading the graph in order to start from scratch, was a frustrating aspect of developing graphs and their programs in the first version of desmosPlayer.  This version has changes meant to reduce the chance that this will happen.
+
+To help you recognize when you have made changes to the graph that you might want to save, desmosPlayer tries to distinguish changes you make by hand from changes made by running the program instructions.  Changes to the graph made by running your program instructions do not enable the "Save" button.  Of course, when you do use the "Save" button, the current state of the graph will be saved, whether it got there by your instructions running or by manual graph changes, or both.
+
+The "Reset" button will not change the state of the graph.  It only resets the program so that it runs from the beginning.  This makes the "Reset" button less destructive, but it means that you need a way to get the graph back into its initial state before you run after a reset. Restoring a saved version of the graph would also destroy changes you've made that you might want to save.  Therefore, it is recommended that you always start your program with instructions that reset any changes your program makes to graph elements.  Whenever you introduce a new expression ID to the program, take a moment to add an instruction that would reset any changes that you plan to make to that expression.  The initialization instructions can be in one or more separate program arrays to distinguish them from the main program.  The initialization arrays can be included at the start of your main program array so that they always execute at the start (see the example graph for "Ptolemy's Theorem").
+
+The "Back Step" button does restore a previously saved graph state, so it will overwrite any changes you've made by hand.  To help recognize when this could happen, the "Back Step" button will turn red when desmosPlayer thinks that clicking it would destroy your changes.  Note that the text of your programs is not overwritten when back-stepping, so the button will not turn red for program changes.  The red color is just a warning.  The changes you made may be insignificant and would not be missed if you click the button while it is red.
+
 ### Instruction Functions
 
     hide (<id>, [<id>, ...])
@@ -165,6 +175,7 @@ the console will show the instruction that was just undone.
     showLabel (<id>, [<id>, ...])
     setLabel (<id>, <labelString>, [<delay>])
     setValue (<id>, <value>, [<delay>])
+    setValue0 (<id>, [<id>, ...])
     startSlider (<id>, [<delay>])
     stopSlider (<id>, [<delay>])
     animateValue (<id>, <startVal>, <endVal>, <increment>, [<frameDelay>], [<delay>])
@@ -213,6 +224,17 @@ Parameter | Description
 Replaces the `<value>` part of the given expression with the given value.
 The value can be any latex expression string or a number.  If the
 expression has a slider that is playing, it will be stopped first.
+
+--------------------------------------------------------------------------
+
+#### setValue0 \(\<id\>, \[\<id\>, ...\]\)
+Parameter | Description
+--- | ---
+\<id\> | A comma-separated list of expression ID's
+
+Equivalent to calling `setValue(\<id\>, 0)` for each of the given expressions.
+This is a useful shorthand for initialization instructions at the beginning
+of a program.
 
 --------------------------------------------------------------------------
 
