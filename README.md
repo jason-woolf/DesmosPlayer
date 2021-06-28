@@ -33,7 +33,7 @@ Graph Link | What It Is
 
 Tested only on Chrome and Safari.  May have issues on other browsers.
 
-Due to the risk of running malicious code in an unknown graph, you should always inspect the code before running it by clicking the program icon.
+Due to the risk of running malicious code in an unknown graph, you should always inspect the code before clicking the program icon.
 
 This is my first forray into JavaScript and GitHub, so please be kind if there are bugs or non-conformant stylings.  😬
 
@@ -52,7 +52,7 @@ Parameter | Description
 
 This is the main function of the DesmosPlayer module.  It loads the given program and creates additional buttons in the UI for running it.
 You create a program by filling an array with the results of "instruction functions" (see examples below), then pass this program
-to `desmosPlayer()`, along with optional properties:
+to `desmosPlayer()`, along with optional properties.  Currently, there is only one property:
 
      debugMode:  Set to 'true' to enable back-stepping.
 
@@ -65,7 +65,7 @@ could be a non-numeric string if the expression is created by your program (see 
 
 > :warning: Note: The ID is not the same as the index of the expression.
 
-> :bulb: Tip: To find the ID of an expression, click on the expression while holding down the Ctrl key (Windows) or the Command key (Mac).  The ID is printed in the console and copied to the clipboard so you can easily paste it into your program.  See the section on Usability Features below for more details.
+> :bulb: Tip: To find the ID of an expression, click on the expression while holding down the Ctrl key on a PC or the Command key (⌘) on a Mac.  The ID is printed in the console and copied to the clipboard so you can easily paste it into your program.  See the section on Usability Features below for more details.
 
 Here is an example of a program script that you would write:
 
@@ -97,11 +97,13 @@ const exampleProgram = [
 desmosPlayer(exampleProgram, {debugMode: true});
 ```
 
-Note that you can have more than one program in your graph.  Only one can be loaded at a time.
+Note that you can have more than one program in your graph, but only one can be loaded at a time.
 
 ### Buttons
 
-When you are ready to run your program, click the circular program icon to the left of the program text.  If all goes well, it will turn green to indicate that the program is loaded, and the "Start", "Reset", "Step" and (optionally) "Back Step" buttons will appear.  The "Reset" and "Back Step" buttons are disabled until you have run at least one instruction.  If there is an error, which may occur immediately or after executing and instruction with an invalid ID, that icon will turn red.  When this happens, you can open the console to find the error message.  In some cases, you can easily find the problem.  But sometimes it is tricky. It helps to be familiar with the developer tools in your browser. If it is not clear what the problem is, check for common syntax mistakes like forgetting to put a comma between instruction functions.  When you change the program text the program icon will return to its uncolored state to indicate that the program has changed since it was loaded, and can be loaded again.
+When you are ready to run your program, click the circular program icon to the left of the program text.  If all goes well, it will turn green to indicate that the program is loaded, and the "Start", "Reset", "Step" and (optionally) "Back Step" buttons will appear.  The "Reset" and "Back Step" buttons are disabled until you have run at least one instruction.  If there is an error, which may occur immediately or after executing an instruction with an invalid ID, that icon will turn red.  When this happens, you can open the console to find the error message.  In some cases, you can easily find the problem, but sometimes it is tricky. It helps to be familiar with the developer tools in your browser. If it is not clear what the problem is, check for common syntax mistakes like forgetting to put a comma between instruction functions.  When you change the program text the program icon will return to its uncolored state to indicate that the program has changed since it was loaded, and can be loaded again.
+
+> :bulb: Tip: You can have more than one program in your graph, but only one can be loaded at a time.  Clicking a program icon will unload any currently loaded program before loading the one that was clicked.
 
 When desmosPlayer has been called and a program is loaded and ready to run, a "Start" button will be added next to the "Save" button. Clicking it will start the program and turn it into a "Stop" button.  Clicking it again will stop execution of the program.  A "Reset" button will also appear. When clicked, it will reset the program so that it starts over from the beginning.
 
@@ -113,32 +115,19 @@ There is also a "Step" button which will execute one function in the program at 
 
 ### Running the Program
 
-When the "Start" button is pressed, execution of the instructions proceeds automatically from one to the next.
-The `pause()` instruction can be used to insert delays.  Also, most
-instructions take an optional delay value as the final parameter which
-inserts an implicit `pause()` after the instruction has run.
+When the "Start" button is pressed, the instructions will be executed one after the other without delay.  To control the timing of the presentation, you will need to insert delays using the `pause()` instruction.  Also, most instructions take an optional delay value as the final parameter which inserts an implicit `pause()` after the instruction has run.  Delay values are given in milliseconds, so a value of 2000 would insert a two-second delay.
 
-Instructions can be grouped together using square brackets.  Instructions
-in such groupings will be run without delays and without giving Desmos a
-chance to update its graph until they have all run.  This can eliminate
-glitches in the animation and make it look as though the instructions ran
-simultaneously.  For example:
+Instructions can be grouped together using square brackets.  Instructions in such groupings will be run without delays and without giving Desmos a chance to update its graph until they have all run.  This can eliminate glitches in the animation and make it look as though the instructions ran simultaneously.  For example:
 
     const testProg = [
-       startSlider(1, 5000),
-       [setValue(1, 0),
-        setValue(2, 1.0),
-        setValue(3, 2.5),
-        hideLabel(3),
-        showLabel(4)],
-       startSlider(1, 5000)
+       startSlider(xPos, 3000),
+       [setValue(xPos, 0),
+        hideLabel(label1),
+        showLabel(label2)],
+       startSlider(xPos, 3000)
     ]
 
-Without the grouping, intermediate states from setting individual values and showing or hiding
-individual expressions might be visible as glitches.  Delays
-within the grouped commands are ignored, and `animateValue()` instructions
-will go directly to the ending value.  It is an error to have a `goto()`
-instruction inside a grouping.
+The square brackets surrounding the second, third and fourth instructions create a grouping.  Without the grouping, intermediate states from setting individual values and showing or hiding individual expressions might be visible as glitches.  Delays within the grouped commands are ignored, and `animateValue()` instructions will go directly to the ending value.  It is an error to have a `goto()` instruction inside a grouping.
 
 > :bulb: Tip: When each instruction is executed, a message is displayed in the console
 so it is possible to see what the program is doing.  When back-stepping,
@@ -148,22 +137,28 @@ the console will show the instruction that was just undone.
 
 > :bulb: Tip: To jump directly to a section of the program that you want to debug, you can add labels and a `goto()` instruction at the start of the program. But without executing all prior instructions, the graph may not be in a useful state when it gets there.
 
-
 ### Usability Features
 
-desmosPlayer has some convenience features to help with developing your program.
+desmosPlayer has some convenience features to help with developing your program.  This table summarizes what is described in detail below.
+
+PC | Mac | Where | What it does
+--- | --- | --- | ---
+Ctrl-click | ⌘-click | On an expression | Copies expression ID to clipboard and prints it in the console
+Ctrl-click | ⌘-click | On selected text in program | Scrolls to and selects expression of selected ID
+Alt-click | ⌥-click | On selected text in program | Search forward for another occurrrance of selected text
+Ctrl-Alt-click | ⌘⌥-click | On selected text in program | Search backward for another occurrance of selected text
 
 #### Finding an expression's ID
 
-Every program needs to refer to expressions by their ID, which is not normally accessible. With desmosPlayer, you can get at an expression's ID by holding down the Ctrl key (Windows) or the Command key (Mac) while clicking on an expression.  The expression's index and ID will be displayed in the console, and the ID will be copied to the clipboard so that you can easily paste it into your program text.
+Every program needs to refer to expressions by their ID, which is not normally accessible. With desmosPlayer, you can get at an expression's ID by holding down the Ctrl key on a PC or the Command key (⌘) on a Mac while clicking on an expression.  The expression's index and ID will be displayed in the console, and the ID will be copied to the clipboard so that you can easily paste it into your program text.
 
 #### Finding an expression from an ID in your program
 
-While developing your program, you might want to know which graph expression corresponds to an ID that you have added to your program.  To find out, select the ID string in your program and click on the selected text while holding down the Ctrl key (Windows) or the Command key (Mac).  The corresponding expression will be selected and scrolled into view.  If your program is loaded, this also works when you select the symbolic name that you have defined for an expression ID!
+While developing your program, you might want to know which graph expression corresponds to an ID that you have added to your program.  To find out, select the ID string in your program and click on the selected text while holding down the Ctrl key on a PC or the Command key (⌘) on a Mac.  The corresponding expression will be selected and scrolled into view.  If your program is loaded, this also works when you select the symbolic name that you have defined for an expression ID!
 
 #### Searching for text within your program
 
-If your program has many lines, you might want some assistance finding text within it. Typically, you might want to find all the references to a particular ID or the symbolic name you defined for it.  Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrances of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the Alt key (Windows) or Option key (Mac).  The next occurrance of that string will become the new selection and will scroll into view if necessary.  The search will wrap around if it reaches the end without finding it. To search backwards, also hold down the Ctrl key (Windows) or the Command key (Mac) (i.e. ctrl-alt-click or command-option-click).
+If your program has many lines, you might want some assistance finding text within it. Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrances of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the Alt key on a PC or the Option key (⌥) on a Mac.  The next occurrance of that string will become the new selection and will scroll into view if necessary.  The search will wrap around if it reaches the end without finding it. To search backwards, also hold down the Ctrl key on a PC or the Command key (⌘) on a Mac (i.e. ctrl-alt-click or ⌘⌥-click).
 
 #### Saving your work
 
@@ -173,7 +168,24 @@ To help you recognize when you have made changes to the graph that you might wan
 
 The "Back Step" button restores a previously saved graph state, so it will overwrite any changes you have made by hand!  To help recognize when this could happen, the "Back Step" button will turn red when desmosPlayer thinks that clicking it would overwrite something you changed.  (Note that the text of your programs is not overwritten when back-stepping, so the button will not turn red for program changes.)  The red color is just a warning.  The changes you made may be insignificant and would not be missed if you click the button while it is red.
 
-The "Reset" button does not restore the original state of the graph.  It only resets the program so that it runs from the beginning.  This makes the "Reset" button less destructive, but it means that you need a way to get the graph back into its initial state before you run after a reset. Note that restoring a saved version of the graph would also destroy changes you've made that you might want to save.  Therefore, it is recommended that you always start your program with instructions that reset any changes your program makes to graph elements.  Whenever you introduce a new expression ID to the program, take a moment to add an instruction that would reset any changes that you plan to make to that expression.  The initialization instructions can be in one or more separate program arrays to distinguish them from the main program.  The initialization arrays can be included at the start of your main program array so that they always execute after a reset (see the example graph for "Ptolemy's Theorem").  If you follow this recommendation, then you can save the graph whenever you make a change that you want to keep, no matter what state the graph is in when you save it.  Save early and often!
+The "Reset" button does not restore the original state of the graph.  It only resets the program so that it runs from the beginning.  This makes the "Reset" button less destructive, but it means that you need a way to get the graph back into its initial state before you run after a reset. Note that restoring a saved version of the graph would also destroy changes you've made that you might want to save.  Therefore, it is recommended that you always start your program with instructions that reset any changes your program makes to graph elements.  Whenever you introduce a new expression ID to the program, take a moment to add an instruction that would reset any changes that you plan to make to that expression.  The initialization instructions can be in one or more separate program arrays to distinguish them from the main program.  These can be included at the start of your main program array so that they always execute after a reset.
+
+    const initialize = [
+       setValue(xPos, 0),
+       hideLabel(label2),
+       showLabel(label1)
+    ]
+    
+    const testProg = [
+       initialize,
+       startSlider(xPos, 3000),
+       [setValue(xPos, 0),
+        hideLabel(label1),
+        showLabel(label2)],
+       startSlider(xPos, 3000)
+    ]
+
+If you follow this recommendation, you can then save the graph whenever you make a change that you want to keep, no matter what state the graph is in when you save it.  Save early and often!
 
 ### Instruction Functions
 
@@ -240,8 +252,8 @@ Parameter | Description
 --- | ---
 \<id\> | A comma-separated list of expression ID's
 
-Equivalent to calling `setValue(\<id\>, 0)` for each of the given expressions.
-This is a useful shorthand for initialization instructions at the beginning
+Equivalent to calling `setValue(<id>, 0)` for each of the given expressions.
+This is useful as shorthand for initializing variables to zero at the beginning
 of a program.
 
 --------------------------------------------------------------------------
