@@ -8,7 +8,7 @@ When I started making short math videos using Desmos for the visuals, I would wr
 ## Installation
 Install the file desmosPlayer.user.js in your browser using your favorite script manager and make sure the installed script is enabled.  Typically (e.g. with Tampermonkey installed) this is done by clicking on the file name above, then clicking "Raw" and then "Install".  Then navigate to any Desmos calculator graph.
 
-To install Tampermonkey on Chrome (free and recommended), go to https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo and click the "install"
+To install Tampermonkey on Chrome, go to https://tinyurl.com/d7t4fkwd and click the "install"
  button. Look for the Tampermonkey icon to the right of the URL bar at the top of the Chrome window, click it, and make sure the drop-down menu indicates that it is enabled.
 
 ## Usage
@@ -101,7 +101,7 @@ Note that you can have more than one program in your graph, but only one can be 
 
 ### Buttons
 
-When you are ready to run your program, click the circular program icon to the left of the program text.  If all goes well, it will turn green to indicate that the program is loaded, and the "Start", "Reset", "Step" and (optionally) "Back Step" buttons will appear.  The "Reset" and "Back Step" buttons are disabled until you have run at least one instruction.  If there is an error, which may occur immediately or after executing an instruction with an invalid ID, that icon will turn red.  When this happens, you can open the console to find the error message.  In some cases, you can easily find the problem, but sometimes it is tricky. It helps to be familiar with the developer tools in your browser. If it is not clear what the problem is, check for common syntax mistakes like forgetting to put a comma between instruction functions.  When you change the program text the program icon will return to its uncolored state to indicate that the program has changed since it was loaded, and can be loaded again.
+When you are ready to run your program, click the circular program icon to the left of the program text.  If all goes well, it will turn green to indicate that the program is loaded, and the "Start", "Reset", "Step" and (optionally) "Back Step" buttons will appear.  The "Reset" and "Back Step" buttons are disabled until you have run at least one instruction.  If there is an error, which may occur as soon as you click the program icon or after executing an instruction with an invalid ID, that icon will turn red.  When this happens, you can open the console to find the error message.  In some cases, you can easily find the problem, but other times it is tricky. It helps to be familiar with the developer tools in your browser. If it is not clear what the problem is, check for common syntax mistakes like forgetting to put a comma between instruction functions.  When you change the program text, the program icon will return to its uncolored state to indicate that the program has changed since it was loaded, and can be loaded again.
 
 > :bulb: Tip: You can have more than one program in your graph, but only one can be loaded at a time.  Clicking a program icon will unload any currently loaded program before loading the one that was clicked.
 
@@ -133,7 +133,7 @@ The square brackets surrounding the second, third and fourth instructions create
 so it is possible to see what the program is doing.  When back-stepping,
 the console will show the instruction that was just undone.
 
-> :bulb: Tip: You can skip through the program quickly by repeatedly clicking the "Step" button.  This can be helpful when debugging a section of the program that is not near the start. When single-stepping, pauses and delays are ignored.  Also, `animateValue()` instructions go straight to the final value and finish if the "Step" button is clicked again while they are running.
+> :bulb: Tip: You can skip through the program quickly by repeatedly clicking the "Step" button.  This can be helpful when debugging a section of the program that is not near the start. When single-stepping, pauses and delays are ignored.  Also, an `animateValue()` instruction goes straight to the final value and finishes if the "Step" button is clicked again while it is running.
 
 > :bulb: Tip: To jump directly to a section of the program that you want to debug, you can add labels and a `goto()` instruction at the start of the program. But without executing all prior instructions, the graph may not be in a useful state when it gets there.
 
@@ -143,9 +143,9 @@ desmosPlayer has some convenience features to help with developing your program.
 
 PC | Mac | Where | What it does
 --- | --- | --- | ---
-Ctrl-click | ⌘-click | On an expression | Copies expression ID to clipboard and prints it in the console
-Ctrl-click | ⌘-click | On selected text in program | Scrolls to and selects expression of selected ID
-Alt-click | ⌥-click | On selected text in program | Search forward for another occurrrance of selected text
+Ctrl-click | ⌘-click | On an expression | Copies the expression's ID to the clipboard and prints it in the console
+Ctrl-click | ⌘-click | On selected text in program | Scrolls to and selects the expression with the selected ID
+Alt-click | ⌥-click | On selected text in program | Search forward for another occurrance of selected text
 Ctrl-Alt-click | ⌘⌥-click | On selected text in program | Search backward for another occurrance of selected text
 
 #### Finding an expression's ID
