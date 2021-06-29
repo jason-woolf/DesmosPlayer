@@ -6,17 +6,16 @@ Program the action in your Desmos graph to create animations for videos, present
 When I started making short math videos using Desmos for the visuals, I would write down the sequence of actions I needed to perform on the expressions while doing a screen capture.  For example:  1) Unhide first expression; 2) Start slider for variable 'xPos'; 3) Hide first expression and show second expression; and so on.  As my videos got longer and more involved, this became quite tedious.  I needed a way to program these actions so they would happen automatically.  That is what DesmosPlayer will do.  You create a list of these actions, including pauses to get the timing right, and then click a button to start it running.
 
 ## Installation
-Install the file desmosPlayer.user.js in your browser using your favorite script manager and make sure the installed script is enabled.  Typically (e.g. with Tampermonkey installed) this is done by clicking on the file name above, then clicking "Raw" and then "Install".  Then navigate to any Desmos calculator graph.
+Install the file desmosPlayer.user.js in your browser using your favorite script manager (such as Greasemonkey or Tampermonkey), and make sure the installed script is enabled.  Typically this is done by clicking on the file name above, then clicking "Raw" and then "Install".  Then navigate to any Desmos calculator graph.
 
-To install Tampermonkey on Chrome, go to https://tinyurl.com/d7t4fkwd and click the "install"
- button. Look for the Tampermonkey icon to the right of the URL bar at the top of the Chrome window, click it, and make sure the drop-down menu indicates that it is enabled.
+If you do not have a script manager running in your browser, visit https://tampermonkey.net and follow instructions for your browser.  If you're using Chrome, go to https://tinyurl.com/d7t4fkwd and click the "install" button. Then look for the Tampermonkey icon to the right of the URL bar at the top of the Chrome window, click it, and make sure the drop-down menu indicates that it is enabled.  Then install desmosPlayer as described above.
 
 ## Usage
 When desmosPlayer is installed, a new kind of expression, a "program", is added to the "+" menu.  A program is a container for text, much like a "note".  It contains javascript code that you write which defines an array of instructions to control elements of your graph. When your javascript code is executed, the array of instructions is loaded into the desmosPlayer system.
 
 ![Program in menu](Screenshots/progmenu.png)
 
-When a program is added to the expression list, it contains a sample program to get you started with the proper syntax and format.  You will replace this code with your own definitions and instruction array(s).  To the left of the text is a circular icon which you will click to execute the program code.  If the code runs successfully, the icon turns green, meaning your instructions have been loaded. Buttons will appear above the graph next to the "Save" button which let you control the execution of these instructions.  If there is an error, the icon will turn red, and you can check the console for an error message, edit the program and try again.
+When a program is added to the expression list from the "+" menu, it contains sample Javascript code to get you started with the proper syntax and format.  You will replace this code with your own definitions and instruction array(s).  To the left of the text is a circular icon which you will click to execute the program code.  If the code runs successfully, the icon turns green, meaning your instructions have been loaded. Buttons will appear above the graph next to the "Save" button which let you control the execution of these instructions.  If there is an error, the icon will turn red, and you can check the console for an error message, edit the program and try again.
 
 ![Sample program](Screenshots/progsample.png)
 
@@ -31,17 +30,17 @@ Graph Link | What It Is
 
 ## Disclaimers
 
-Tested only on Chrome and Safari.  May have issues on other browsers.
+This has been tested only on Chrome and Safari.  There may be issues on other browsers.
 
 Due to the risk of running malicious code in an unknown graph, you should always inspect the code before clicking the program icon.
 
-This is my first forray into JavaScript and GitHub, so please be kind if there are bugs or non-conformant stylings.  😬
+This is my first attempt at writing JavaScript and using GitHub, so please be kind if there are bugs or non-conformant stylings.  😬
 
 ## Documentation
 
 ### Overview
 
-This system allows you to write a simple piece of JavaScript code that defines a program, a sequence of actions to perform on a Desmos graph.  The main element of that code is a call to the function `desmosPlayer()`.
+The desmosPlayer system allows you to define a sequence of actions to perform on a Desmos graph using the Javascript language.  The main element of that code is a call to the function `desmosPlayer()`.
 
 #### desmosPlayer (\<program\>, [\{\<properties\>\}])
 
@@ -50,7 +49,7 @@ Parameter | Description
 \<program\> | An array of instructions that modify expressions in a Desmos graph.
 \<properties\> | (optional) An object that conveys additional configuration parameters.
 
-This function loads the given program and creates additional buttons in the UI for running it.
+This function loads the given program and creates additional buttons on the Desmos web page for running it.
 You create a program by filling an array with the results of "instruction functions" (see examples below), then pass this program
 to `desmosPlayer()`, along with optional properties.  Currently, there is only one property:
 
@@ -144,9 +143,9 @@ desmosPlayer has some convenience features to help with developing your program.
 PC | Mac | Where | What it does
 --- | --- | --- | ---
 Ctrl-click | ⌘-click | On an expression | Copies the expression's ID to the clipboard and prints it in the console
-Ctrl-click | ⌘-click | On selected text in program | Scrolls to and selects the expression with the selected ID
-Alt-click | ⌥-click | On selected text in program | Search forward for another occurrance of selected text
-Ctrl-Alt-click | ⌘⌥-click | On selected text in program | Search backward for another occurrance of selected text
+Ctrl-click | ⌘-click | On selected program text | Scrolls to and selects the expression with the selected ID
+Alt-click | ⌥-click | On selected program text | Search forward for another occurrance of selected text
+Ctrl-alt-click | ⌘⌥-click | On selected program text | Search backward for another occurrance of selected text
 
 #### Finding an expression's ID
 
@@ -158,7 +157,7 @@ While developing your program, you might want to know which graph expression cor
 
 #### Searching for text within your program
 
-If your program has many lines, you might want some assistance finding text within it. Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrances of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the Alt key on a PC or the Option key (⌥) on a Mac.  The next occurrance of that string will become the new selection and will scroll into view if necessary.  The search will wrap around if it reaches the end without finding it. To search backwards, also hold down the Ctrl key on a PC or the Command key (⌘) on a Mac (i.e. ctrl-alt-click or ⌘⌥-click).
+If your program has many lines, you might want some assistance finding text within it. Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrances of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the Alt key on a PC or the Option key (⌥) on a Mac.  The next occurrance of that string will become the new selection and will scroll into view if necessary.  The search will wrap around if it reaches the end without finding it. To search backwards, also hold down the Ctrl key on a PC or the Command key (⌘) on a Mac (i.e. Ctrl-alt-click or ⌘⌥-click).
 
 #### Saving your work
 
