@@ -3,7 +3,7 @@ Program the action in your Desmos graph to create animations for videos, present
 
 ![Intro Screenshot](MJScreenshot.png)
 ## Introduction
-When I started making short math videos using Desmos for the visuals, I would write down the sequence of actions I needed to perform on the expressions while doing a screen capture.  For example:  1) Unhide first expression; 2) Start slider for variable A; 3) Hide first expression and show second expression; and so on.  As my videos got longer and more involved, this became quite tedious.  I needed a way to program those actions so it would just happen automatically.  That is what DesmosPlayer will do.  You create a list of these actions, including pauses to get the timing right, and then click a button to start it running.
+When I started making short math videos using Desmos for the visuals, I would write down the sequence of actions I needed to perform on the expressions while doing a screen capture.  For example:  1) Unhide first expression; 2) Start slider for variable 'xPos'; 3) Hide first expression and show second expression; and so on.  As my videos got longer and more involved, this became quite tedious.  I needed a way to program these actions so they would happen automatically.  That is what DesmosPlayer will do.  You create a list of these actions, including pauses to get the timing right, and then click a button to start it running.
 
 ## Installation
 Install the file desmosPlayer.user.js in your browser using your favorite script manager and make sure the installed script is enabled.  Typically (e.g. with Tampermonkey installed) this is done by clicking on the file name above, then clicking "Raw" and then "Install".  Then navigate to any Desmos calculator graph.
@@ -50,7 +50,7 @@ Parameter | Description
 \<program\> | An array of instructions that modify expressions in a Desmos graph.
 \<properties\> | (optional) An object that conveys additional configuration parameters.
 
-This is the main function of the DesmosPlayer module.  It loads the given program and creates additional buttons in the UI for running it.
+This function loads the given program and creates additional buttons in the UI for running it.
 You create a program by filling an array with the results of "instruction functions" (see examples below), then pass this program
 to `desmosPlayer()`, along with optional properties.  Currently, there is only one property:
 
