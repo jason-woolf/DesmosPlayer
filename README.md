@@ -30,7 +30,7 @@ Graph Link | What It Is
 
 ## Disclaimers
 
-This has been tested only on Chrome and Safari.  There may be issues on other browsers.
+This has been developed and tested only on Chrome.  Various features may not work as well with other browsers.
 
 Due to the risk of running malicious code in an unknown graph, you should always inspect the code before clicking the program icon.
 
@@ -291,9 +291,9 @@ Animates a variable by setting its value to `startVal` and incrementing or
 decrementing it by the given `interval` until it reaches `endVal`.  Speed
 can be controlled by changing the `interval` and by giving a `frameTime` value.
 This is similar to playing a slider, but allows explicit control over the
-speed and the step size, and allows running in reverse.  The instruction
-blocks until the `endVal` is reached, unlike startSlider which moves on to
-the next instruction after the slider starts.  If the expression has a
+speed and the step size, and allows running in reverse.  This instruction
+does not finish until the `endVal` is reached, unlike startSlider which moves on to
+the next instruction as soon as the slider starts.  If the expression has a
 slider that is playing, it will be stopped first.
 
 --------------------------------------------------------------------------
