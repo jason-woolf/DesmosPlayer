@@ -1,7 +1,7 @@
 # DesmosPlayer
 Program the action in your Desmos graph to create animations for videos, presentations, etc.
 
-![Intro Screenshot](MJScreenshot.png)
+![Intro Screenshot](Screenshots/MJScreenshot.png)
 ## Introduction
 When I started making short math videos using Desmos for the visuals, I would write down the sequence of actions I needed to perform on the expressions while doing a screen capture.  For example:  1) Unhide first expression; 2) Start slider for variable 'xPos'; 3) Hide first expression and show second expression; and so on.  As my videos got longer and more involved, this became quite tedious.  I needed a way to program these actions so they would happen automatically.  That is what DesmosPlayer will do.  You create a list of these actions, including pauses to get the timing right, and then click a button to start it running.
 
