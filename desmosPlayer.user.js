@@ -1172,7 +1172,6 @@ function isAProgram (text) {
                             Calc.controller.dispatch({type: 'clear-unsaved-changes'});
                         }
                     } else if (!document.activeElement.classList.contains('program-textarea')) {
-                        console.log(document.activeElement);
                         userChanged = 1;
                         changeCount++;
                         if (debugMode && currentIndex >= 0) {
