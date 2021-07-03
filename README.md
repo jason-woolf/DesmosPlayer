@@ -24,9 +24,10 @@ To quickly give this a try, install desmosPlayer in your browser and then visit 
 
 Graph Link | What It Is
 --- | ---
+<a target="_blank" href="https://www.desmos.com/calculator/y4nsmx7miy">Ptolemy's Theorem</a> | The graph used to make <a target="_blank" href="https://youtu.be/ZK08Z5A9xH4">this video</a>.
 <a target="_blank" href="https://www.desmos.com/calculator/rnzfxhdzqu">MathyJaphy</a> | Animation of my YouTube channel logo, used in <a target="_blank" href="https://youtu.be/sV1NbgNodD0">this video</a>.
 <a target="_blank" href="https://www.desmos.com/calculator/hslbl39gnw">Binary Counter</a> | A demonstration of how one might use labels and goto instructions.
-<a target="_blank" href="https://www.desmos.com/calculator/y4nsmx7miy">Ptolemy's Theorem</a> | The graph used to make <a target="_blank" href="https://youtu.be/ZK08Z5A9xH4">this video</a>.
+
 
 ## Disclaimers
 
