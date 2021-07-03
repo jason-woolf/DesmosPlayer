@@ -145,8 +145,8 @@ PC | Mac | Where | What it does
 --- | --- | --- | ---
 Ctrl-click | ⌘-click | On an expression | Copies the expression's ID to the clipboard and prints it in the console
 Ctrl-click | ⌘-click | On selected program text | Scrolls to and selects the expression with the selected ID
-Alt-click | ⌥-click | On selected program text | Search forward for another occurrance of selected text
-Ctrl-alt-click | ⌘⌥-click | On selected program text | Search backward for another occurrance of selected text
+Alt-click | ⌥-click | On selected program text | Search forward for another occurrence of selected text
+Ctrl-alt-click | ⌘⌥-click | On selected program text | Search backward for another occurrence of selected text
 
 #### Finding an expression's ID
 
@@ -158,7 +158,7 @@ While developing your program, you might want to know which graph expression cor
 
 #### Searching for text within your program
 
-If your program has many lines, you might want some assistance finding text within it. Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrances of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the Alt key on a PC or the Option key (⌥) on a Mac.  The next occurrance of that string will become the new selection and will scroll into view if necessary.  The search will wrap around if it reaches the end without finding it. To search backwards, also hold down the Ctrl key on a PC or the Command key (⌘) on a Mac (i.e. Ctrl-alt-click or ⌘⌥-click).
+If your program has many lines, you might want some assistance finding text within it. Desmos's ctrl-F feature allows you to search within the expressions list, but it only shows you the expressions that contain the search string, not where the search string is within the expression.  So, desmosPlayer has a special mechanism for searching within a program for other occurrences of text that you have already found.  (If you don't see the text you want to search for, you'll need to type it into the program, perhaps within a comment so it doesn't cause an error before you get around to removing it).  Select the text you want to search for, then click on the selected text while holding down the Alt key on a PC or the Option key (⌥) on a Mac.  The next occurrence of that string will become the new selection and will scroll into view if necessary.  The search will wrap around if it reaches the end without finding it. To search backwards, also hold down the Ctrl key on a PC or the Command key (⌘) on a Mac (i.e. Ctrl-alt-click or ⌘⌥-click).
 
 #### Saving your work
 
