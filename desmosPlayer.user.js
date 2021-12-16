@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          desmosPlayer
 // @namespace     http://github.com/jason-woolf
-// @version       1.1
+// @version       1.2
 // @description   Program a series of graph changes to create animation
 // @author        Jason Woolf (MathyJaphy)
 // @match         https://www.desmos.com/calculator*
@@ -15,8 +15,31 @@
 "use strict"
 
 const versionMajor = 1;
-const versionMinor = 1;
+const versionMinor = 2;
 const versionStr = `v${versionMajor}.${versionMinor}`;
+
+function triggerAction (id, delay=0) {
+    let verify = 1;
+    const func = () => {
+        if (verify) {
+            verify = 0;
+            verifyId(id);
+        }
+        Calc.controller.dispatch({type: "action-single-step", id: id});
+        return delay;
+    }
+    func.desc = ['triggerAction', arguments];
+    return func;
+}
+
+function toggleTicker (delay=0) {
+    const func = () => {
+        Calc.controller.dispatch({type: "toggle-ticker"});
+        return delay;
+    }
+    func.desc = ['toggleTicker', arguments];
+    return func;
+}
 
 function hide (...ids) {
     let verify = 1;
@@ -273,7 +296,7 @@ function set (id, properties, delay=0) {
 function stop (messageStr) {
     const func = () => {
         message.innerHTML = messageStr;
-        startButton.firstChild.innerHTML = 'Start';
+        startButton.innerHTML = 'Start';
         running = 0;
     }
     func.desc = ['stop', arguments];
@@ -400,38 +423,22 @@ function playerButtonColor (el) {
 function enableButton (el) {
     if (el != undefined) {
         let color = playerButtonColor(el);
-        let btn = el.firstChild;
+        let btn = el;
         if (!btn.classList.contains(color)) {
             btn.classList.remove('dcg-btn-blue');
             btn.classList.remove('dcg-btn-red');
             btn.classList.add(playerButtonColor(el));
-            btn.classList.remove('disabled-save-btn');
+            btn.classList.remove('player-btn-disabled');
         }
     }
 }
 
 function disableButton (el) {
-    if (el != undefined && !el.firstChild.classList.contains('disabled-save-btn')) {
-        let btn = el.firstChild;
-        btn.classList.add('disabled-save-btn');
+    if (el != undefined && !el.classList.contains('.player-btn-disabled')) {
+        let btn = el;
+        btn.classList.add('player-btn-disabled');
         btn.classList.remove('dcg-btn-blue');
         btn.classList.remove('dcg-btn-red');
-    }
-}
-
-function checkBackStepStomp () {
-    if (debugMode && history.length > 0) {
-        if (history[history.length - 1].userChangeCount == changeCount) {
-            if (revStepButton.firstChild.classList.contains('dcg-btn-red')) {
-                revStepButton.firstChild.classList.add('dcg-btn-blue');
-                revStepButton.firstChild.classList.remove('dcg-btn-red');
-            }
-        } else {
-            if (revStepButton.firstChild.classList.contains('dcg-btn-blue')) {
-                revStepButton.firstChild.classList.add('dcg-btn-red');
-                revStepButton.firstChild.classList.remove('dcg-btn-blue');
-            }
-        }
     }
 }
 
@@ -496,7 +503,7 @@ function setState (index) {
     if (index >= steps.length) {
         running = 0;
         stepping = 0;
-        startButton.firstChild.innerHTML = 'Start';
+        startButton.innerHTML = 'Start';
         markState(index);
         return;
     }
@@ -504,6 +511,7 @@ function setState (index) {
     currentIndex = index;
     steplog(index, false);
     markState(index);
+//    setTimeout(() => runStatement(steps[index]), 50);
     runStatement(steps[index]);
 }
 
@@ -669,7 +677,7 @@ function resetState() {
         running = 0;
         currentIndex = -1;
         resetCount++;
-        startButton.firstChild.innerHTML = 'Start';
+        startButton.innerHTML = 'Start';
         history = [];
         markState(-1);
         console.clear();
@@ -689,10 +697,10 @@ function startStop() {
     const func = () => {
         if (running) {
             running = 0;
-            startButton.firstChild.innerHTML = 'Start';
+            startButton.innerHTML = 'Start';
         } else {
             running = 1;
-            startButton.firstChild.innerHTML = 'Stop';
+            startButton.innerHTML = 'Stop';
             setState(currentIndex + 1);
         }
         stepping = 0;
@@ -708,10 +716,10 @@ function startStop() {
 function desmosPlayer (program, properties={}) {
 
     const interval = setInterval(() => {
-        if (document.querySelector('.save-button') && window.Calc) {
+        if (document.querySelector('.align-left-container') && window.Calc) {
+            clearInterval(interval);
             Calc = window.Calc;
             init();
-            clearInterval(interval);
         }
     }, 100);
 
@@ -733,26 +741,30 @@ function desmosPlayer (program, properties={}) {
         if (saveButton !== undefined) {
             resetState();
         } else {
-            saveButton = document.querySelector('.save-button');
+            const saveButtonContainer = document.querySelector('.title-div');
+            saveButton = saveButtonContainer.querySelector('.dcg-action-save');
 
-            startButton = saveButton.cloneNode(true);
-            startButton.firstChild.innerHTML = 'Start';
-            startButton.addEventListener('click', startStop);
-            startButton.firstChild.classList.remove('dcg-btn-green');
-            startButton.firstChild.classList.remove('disabled-save-btn');
-            startButton.firstChild.classList.add('dcg-btn-blue');
-            saveButton.after(startButton);
+
+            const centerContainer = document.querySelector('.align-center-container');
+            centerContainer.style.textAlign = 'left';
+            startButton = document.createElement('span');
+            startButton.role = 'button';
+            startButton.innerHTML = 'Start';
+            startButton.classList.add('player-button');
+            startButton.classList.add('dcg-btn-blue');
+//            centerContainer.replaceChild(startButton, centerContainer.firstChild);
+            saveButtonContainer.appendChild(startButton);
 
             resetButton = startButton.cloneNode(true);
-            resetButton.firstChild.innerHTML = 'Reset';
+            resetButton.innerHTML = 'Reset';
             resetButton.addEventListener('click', resetState);
-            resetButton.classList.add('player-button');
             startButton.after(resetButton);
+            startButton.addEventListener('click', startStop);
 
             startButton.classList.add('start-button');
 
             stepButton = resetButton.cloneNode(true);
-            stepButton.firstChild.innerHTML = 'Step';
+            stepButton.innerHTML = 'Step';
             stepButton.addEventListener('click', () => {
                 const func = () => {
                     if (running) {
@@ -772,7 +784,7 @@ function desmosPlayer (program, properties={}) {
             resetButton.after(stepButton);
 
             revStepButton = stepButton.cloneNode(true);
-            revStepButton.firstChild.innerHTML = 'Back Step';
+            revStepButton.innerHTML = 'Back Step';
             revStepButton.addEventListener('click', () => {
                 const func = () => {
                     if (running) {
@@ -799,14 +811,14 @@ function desmosPlayer (program, properties={}) {
             })
             stepButton.after(revStepButton);
 
-            const title = document.querySelector('.dcg-variable-title');
-            message = title.cloneNode(true);
+            message = document.createElement('span');
+            message.innerHTML = '';
             message.style.maxWidth = '600px';
-
-            const buttonContainer = document.querySelector('.save-btn-container');
-            buttonContainer.after(message);
-            buttonContainer.style.position = 'relative';
-            buttonContainer.style.top = '-18px';
+            message.style.position = 'absolute';
+            message.style.marginTop = '3px';
+            message.style.marginLeft = '8px';
+            message.style.fontSize = '110%';
+            revStepButton.after(message);
 
             document.querySelector('.align-center-container').style.display = 'none';
         }
@@ -862,10 +874,10 @@ function isAProgram (text) {
 
 (function () {
     const interval = setInterval(() => {
-        if (document.querySelector('.save-button') && window.Calc) {
-            Calc = window.Calc;
-            init()
+        if (window.Calc) {
             clearInterval(interval);
+            Calc = window.Calc;
+            init();
         }
     }, 100);
 
@@ -1072,20 +1084,23 @@ function isAProgram (text) {
              .prog-action-newexpression .dcg-icon-new-expression::before {
                content: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAUCAIAAAD3FQHqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABGSURBVDhPY6AiYATi////QziUAEZGRiYoc7ABhB+BjqTEs1T2IzXNwu5HIBvCwA+QwwSoZbCG16gfCYBRPw4aP1IPMDAAAA+SRRngEMxiAAAAAElFTkSuQmCC);
              }
-             .dcg-calculator-api-container .save-btn-container .save-button .dcg-btn-blue, .dcg-calculator-api-container .save-btn-container .save-button .dcg-btn-red {
-               display: inline-block;
-               height: 28px;
-               line-height: 28px;
-               padding: 0 15px;
-             }
-             .player-button {
+             .title-div .player-button {
+                position: relative;
+                display: inline-block;
+                top: -16px;
+                height: 28px;
+                line-height: 28px;
+                padding: 0 15px;
                 margin-left: 8px;
+                border-radius: 20px;
              }
-             .start-button {
-                margin-left: 40px;
+             .title-div .start-button {
+                margin-left: 100px;
              }
-             .start-button .dcg-btn-blue, .player-button .dcg-btn-blue, .player-button .dcg-btn-red, .dcg-calculator-api-container .save-btn-container .player-button .disabled-save-btn {
-               border-radius: 20px;
+             .title-div .player-btn-disabled {
+                border-width: 1px;
+                border-color: #DDD;
+                border-style: solid;
              }
              `
             document.head.appendChild(styleEl)
@@ -1134,7 +1149,7 @@ function isAProgram (text) {
                         if (addedNode.nodeName === '#text') {
                             continue;
                         }
-                        const id = addedNode.attributes['expr-id']?.value
+                        const id = addedNode.attributes['expr-id']?.value;
                         const expr = id ? Calc.getState().expressions.list.filter(e => e.id === id.toString())[0] : undefined
                         if (expr && expr.type == 'text' && isAProgram(expr.text)) {
                             cNTP(addedNode);
@@ -1155,7 +1170,11 @@ function isAProgram (text) {
                         }
                         if (addedNode.classList.contains('dcg-drag-container')) {
                             const child = addedNode.querySelector('.dcg-expressiontext');
-                            cNTP(child);
+                            const id = child.attributes['expr-id']?.value;
+                            const expr = id ? Calc.getState().expressions.list.filter(e => e.id === id.toString())[0] : undefined
+                            if (expr && expr.type == 'text' && isAProgram(expr.text)) {
+                                cNTP(child);
+                            }
                         }
                     }
                 }
@@ -1168,7 +1187,7 @@ function isAProgram (text) {
             Calc.observeEvent('change', () => {
                 if (saveButton) {
                     if (running || stepping || backStepping || animating) {
-                        if (!userChanged && !saveButton.firstChild.classList.contains('disabled-save-btn')) {
+                        if (!userChanged && !saveButton.classList.contains('dcg-disabled')) {
                             Calc.controller.dispatch({type: 'clear-unsaved-changes'});
                         }
                     } else if (!document.activeElement.classList.contains('program-textarea')) {
