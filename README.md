@@ -162,7 +162,7 @@ If your program has many lines, you might want some assistance finding text with
 
 #### Saving your work
 
-Losing important changes by resetting the graph, or by back-stepping, or by reloading the graph in order to start from scratch, was a frustrating aspect of developing graphs and their programs in the first version of desmosPlayer.  This version has changes meant to reduce the chance that this will happen. 
+Losing important changes by back-stepping or by reloading the graph in order to start from scratch can be frustrating!  DesmosPlayer has features that help reduce the chance that this will happen. 
 
 To help you recognize when you have made changes to the graph that you might want to save, desmosPlayer will not enable the "Save" button for graph changes made by running your instructions.  In other words, if the "Save" button is enabled, there is a change that you made by hand which you should consider saving.  Of course, when you do use the "Save" button, the current state of the graph will be saved, whether it got there by your instructions running or by manual graph changes, or both.
 
