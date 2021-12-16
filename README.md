@@ -168,7 +168,7 @@ To help you recognize when you have made changes to the graph that you might wan
 
 The "Back Step" button restores a previously saved graph state, so it will overwrite any changes you have made by hand!  To help recognize when this could happen, the "Back Step" button will turn red when desmosPlayer thinks that clicking it would overwrite something you changed.  (Note that the text of your programs is not overwritten when back-stepping, so the button will not turn red for program changes.)  The red color is just a warning.  The changes you made may be insignificant and would not be missed if you click the button while it is red.
 
-The "Reset" button does not restore the original state of the graph.  It only resets the program so that it runs from the beginning.  This makes the "Reset" button less destructive, but it means that you need a way to get the graph back into its initial state before you run after a reset. Note that restoring a saved version of the graph would also destroy changes you've made that you might want to save.  Therefore, it is recommended that you always start your program with instructions that reset any changes your program makes to graph elements.  Whenever you introduce a new expression ID to the program, take a moment to add an instruction that would reset any changes that you plan to make to that expression.  The initialization instructions can be in one or more separate program arrays to distinguish them from the main program.  These can be included at the start of your main program array so that they always execute after a reset.
+The "Reset" button does not restore the original state of the graph.  It only resets the program so that it runs from the beginning.  This means that you need a way to get the graph back into its initial state before you rerun your program. Therefore, it is recommended that you always start your program with instructions that reset any changes your program makes to graph elements.  Whenever you introduce a new expression ID to the program, take a moment to add an instruction that would reset any changes that you plan to make to that expression.  The initialization instructions can be in one or more separate program arrays to distinguish them from the main program.  These can be included at the start of your main program array so that they always execute after a reset.
 
     const initialize = [
        setValue(xPos, 0),
@@ -185,7 +185,7 @@ The "Reset" button does not restore the original state of the graph.  It only re
        startSlider(xPos, 3000)
     ]
 
-If you follow this recommendation, you can then save the graph whenever you make a change that you want to keep, no matter what state the graph is in when you save it.  Save early and often!
+If you follow this recommendation, you don't have to worry about what state the graph is in when you save it.  Save early and often!
 
 ### Instruction Functions
 
@@ -201,6 +201,8 @@ If you follow this recommendation, you can then save the graph whenever you make
     animateValue (<id>, <startVal>, <endVal>, <increment>, [<frameDelay>], [<delay>])
     setSliderProperties (<id>, {<properties>}, [<delay>])
     set (<id>, <properties>, [<delay>])
+    triggerAction (<id>, [<delay>])
+    toggleTicker ([<delay>])
     stop (<messageString>)
     pause (<delay>)
     label (<labelNameString>)
@@ -340,6 +342,27 @@ and has reached the maximum value).  Use stopSlider() beforehand, if necessary.
 
 -----------------------------------------------------------------------------
 
+#### triggerAction \(\<id\>, \[\<delay\>\]\)
+Parameter | Description
+--- | ---
+\<id\> | The ID of an action expression to operate on
+\<delay\> | (optional) Number of milliseconds to delay before next instruction
+
+Equivalent to pressing the "arrow" icon for an action expression.  The action
+is executed once.
+
+-----------------------------------------------------------------------------
+
+#### toggleTicker \(\[\<delay\>\]\)
+Parameter | Description
+--- | ---
+\<delay\> | (optional) Number of milliseconds to delay before next instruction
+
+If the graph has defined a ticker expression, then this function will toggle
+its state from paused to running, or vice versa.  It is equivalent to clicking
+the ticker's "metronome" icon.
+
+-----------------------------------------------------------------------------
 #### stop \(\<messageString\>\)
 Parameter | Description
 --- | ---
